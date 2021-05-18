@@ -2,7 +2,7 @@
 
 **1.** Download [AutoHotkey](https://www.autohotkey.com/download/ahk-install.exe) and install Using the Express Option (Unicode 64-Bit).  
 
-**2.** *Right-Click* > *Save Link As* > to Download/Save [CarOfferSetup.ahk](https://raw.githubusercontent.com/TyGreenyy/AHKCarOffer/main/CarOfferSetup.ahk) and place the file in your Documents Folder. 
+**2.** *Right-Click* > *Save Link As* > to Download/Save [CarOfferSetup.ahk](https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk) and place the file in your Documents Folder. 
 
 **3.** Launch by double clicking the CarOFferSetup.ahk file in your Documents folder. 
 
