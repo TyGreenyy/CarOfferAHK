@@ -34,11 +34,11 @@ updateScript() {                     ;Create Directory Structure - Update script
 	  FileCreateDir, %A_MyDocuments%\CarOfferAHK\              ;Create Directory Structure 
 	  FileCreateDir, %A_MyDocuments%\CarOfferAHK\resources\             ;Create Directory Structure
 
-  UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/AHKCarOffer/main/resources/DealerCodes.ini, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
-  UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/AHKCarOffer/main/resources/caroffer_0HP_icon.ico, %A_MyDocuments%\CarOfferAHK\resources\caroffer_0HP_icon.ico
+  UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/DealerCodes.ini, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
+  UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/CarOfferAHK_Rounded.ico, %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
 
   whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")               ;Create HTTP request to check version
-  whr.Open("GET", "https://raw.githubusercontent.com/TyGreenyy/AHKCarOffer/main/version.md", true)
+  whr.Open("GET", "https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/version.md", true)
   whr.Send()
   ; Using 'true' above and the call below allows the script to remain responsive.
   whr.WaitForResponse()
@@ -47,7 +47,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   RegExMatch(trim(version), "[0-9]" , version)                  ;Checks version against Github version
   if (version = 8){                                             ;Downloads new .ahk if version does not match
 	  } else {
-	  ; UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/AHKCarOffer/main/CarOfferSetup.ahk, %A_MyDocuments%\CarOfferAHK.ahk
+	  	UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
 		}
 }
 
@@ -107,8 +107,8 @@ SetNumLockState, On
 ; global rightsidedelay:=3        ;Hotcorners TopCenter Delay setting
 
 trayMenu(){
-	ifexist %A_MyDocuments%\CarOfferAHK\resources\caroffer_0HP_icon.ico
-		Menu, Tray, Icon, %A_MyDocuments%\CarOfferAHK\resources\caroffer_0HP_icon.ico
+	ifexist %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
+		Menu, Tray, Icon, %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
 }
 
 use_TrayIcon(Script, Action) { ; use tray icon actions of a running AHK script
