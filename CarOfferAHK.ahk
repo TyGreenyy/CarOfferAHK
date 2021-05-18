@@ -5,11 +5,6 @@
 ; Author ........: TyGreeny
 ; =====================================================================================
 
-
-; C:\Program Files\AutoHotkey\AutoHotkey.exe
-
-; global installerexe := A_MyDocuments "\AutoHotkey\AHKCarOffer-Install.exe"
-
 Suspend, On                     ;Suspend Script for Update
 directoryMove()
 updateScript()
@@ -20,20 +15,20 @@ Sleep, 1000
 reloadAsAdmin_Task()         ;Runs reloadAsAdmin task
 
 directoryMove(){
-if !(A_ScriptDir = A_MyDocuments){
-	FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MYDocuments%\CarOfferAHK.ahk
+	if !(A_ScriptDir = A_MyDocuments){
+	FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
 	MsgBox, Moved File
 	Sleep, 3000
 	Run, %A_MyDocuments%\CarOfferAHK.ahk  /restart
 	Sleep, 200
 	ExitApp
-} else {
+	} else {
 	FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
-}
-return
+	}
+	return
 }
 
-updateScript(){                     ;Create Directory Structure - Update script from Github
+updateScript() {                     ;Create Directory Structure - Update script from Github
 
   if !FileExist("%A_MyDocuments%\CarOfferAHK\")
 	  FileCreateDir, %A_MyDocuments%\CarOfferAHK\              ;Create Directory Structure 
@@ -54,7 +49,7 @@ updateScript(){                     ;Create Directory Structure - Update script 
 	  } else {
 	  ; UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/AHKCarOffer/main/CarOfferSetup.ahk, %A_MyDocuments%\CarOfferAHK.ahk
 		}
-	}
+}
 
 ;{ ============================== Notes ===============================================
 ; All directives(that are settings) and many commands appear here irvrespective of its need
