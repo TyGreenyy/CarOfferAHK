@@ -17,7 +17,6 @@ reloadAsAdmin_Task()         ;Runs reloadAsAdmin task
 directoryMove(){
 	if !(A_ScriptDir = A_MyDocuments){
 	FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
-	MsgBox, Moved File
 	Sleep, 3000
 	Run, %A_MyDocuments%\CarOfferAHK.ahk  /restart
 	Sleep, 200
