@@ -1,4 +1,4 @@
-# AHKCarOffer
+# CarOffer AutoHotkey
 
 **1.** Download [AutoHotkey](https://www.autohotkey.com/download/ahk-install.exe) and install Using the Express Option (Unicode 64-Bit).  
 
