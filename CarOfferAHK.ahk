@@ -549,7 +549,7 @@ jiraFunc(){
 }
 
 carGurus(){
-	searchTerm := Clip()
+	searchTerm := Trim(searchTermClean())
 	if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
 		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Complete VIN")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
 		return
