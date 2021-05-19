@@ -130,6 +130,11 @@ use_TrayIcon(Script, Action) { ; use tray icon actions of a running AHK script
 ;   return False
 ; }
 
+DateAction:
+	DatePaste := StrReplace(A_ThisMenuItem, "Paste: ", "")
+	SendInput %DatePaste%{Raw}%A_EndChar%
+Return
+
 class caseMenu {
 	__new(){
 
@@ -145,8 +150,8 @@ class caseMenu {
 		for _, j in [[OutputVar]]
 
 		{
-			Menu, caseMenu, add, Paste "%OutputVar%", DateAction
-			Menu, caseMenu, Icon, Paste "%OutputVar%", %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , 5
+			Menu, caseMenu, add, Paste: %OutputVar%, DateAction
+			Menu, caseMenu, Icon, Paste: %OutputVar%, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , 5
 		}
 
 		;Seperator One
@@ -731,8 +736,11 @@ googlefileDownload(){
 
 truePeopleSearch(){
 	phoneFormat := phoneBaseFormat()
+		if (phoneFormat = "")
+			Exit
 	phonenumber := "("phoneFormat[4]")"phoneFormat[5]"-"phoneFormat[6]
-	openLink = https://www.truepeoplesearch.com/results?phoneno=%phonenumber%
+	openLink := "https://www.truepeoplesearch.com/results?phoneno=" phonenumber
+	openlink := URI_URLEncode(openLink)
 	ShellRun(openLink)
 		return
 }
@@ -744,7 +752,7 @@ phoneBaseFormat(){
 		oldClip := oldClip2
 	oldClip := RegExReplace(oldClip, "[^0-9]", "")
 	if (!RegExMatch(oldClip, "^\d{9,11}$")) {
-		return
+		Exit
 		}
 	phoneSection1 := SubStr(oldClip, 1, 3)
 	phoneSection2 := SubStr(oldClip, 4, 3)
