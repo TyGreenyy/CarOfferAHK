@@ -152,7 +152,7 @@ class caseMenu {
 		;Seperator Two
 		Menu, caseMenu, Add
 
-		for _, j in [["searchVXDealer","Search V&XDealer"],["dealerstats","Search DealerStats"]]
+		for _, j in [["searchVXDealer","Search V&XDealer"],["dealerstats","Search DealerStats"],["dealerCDS","Search Dealer &CDS"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -162,7 +162,7 @@ class caseMenu {
 		;Seperator Three
 		; Menu, caseMenu, Add
 
-		for _, j in [["auctionCaps","Search Auction Caps"],["dealerExclu","Search Dealer Exclusions"],["matrixOverview","Search Matrix Overview"],["dealerCDS","Search Dealer &CDS"],["dealerAccepts","Search Dealer &Accepts"],["dealerOG","Search Dealer &OfferGuards"],["dealerPuts","Search Dealer P&uts"]]
+		for _, j in [["auctionCaps","Search Auction Caps"],["dealerExclu","Search Dealer Exclusions"],["matrixOverview","Search Matrix Overview"],["dealerAccepts","Search Dealer &Accepts"],["dealerOG","Search Dealer &OfferGuards"],["dealerPuts","Search Dealer P&uts"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
