@@ -149,8 +149,6 @@ class caseMenu {
 			Menu, caseMenu, Icon, Paste "%OutputVar%", %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , 5
 		}
 
-
-
 		;Seperator One
 		Menu, caseMenu, Add
 
