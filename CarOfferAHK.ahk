@@ -160,7 +160,7 @@ class caseMenu {
 		}
 
 		;Seperator Three
-		Menu, caseMenu, Add
+		; Menu, caseMenu, Add
 
 		for _, j in [["auctionCaps","Search Auction Caps"],["dealerExclu","Search Dealer Exclusions"],["matrixOverview","Search Matrix Overview"],["dealerCDS","Search Dealer &CDS"],["dealerAccepts","Search Dealer &Accepts"],["dealerOG","Search Dealer &OfferGuards"],["dealerPuts","Search Dealer P&uts"]]
 
