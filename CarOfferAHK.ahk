@@ -152,7 +152,7 @@ class caseMenu {
 		;Seperator Two
 		Menu, caseMenu, Add
 
-		for _, j in [["searchVXDealer","Search V&XDealer"],["dealerstats","Search DealerStats"],["auctionCaps","Search Auction Caps"],["matrixOverview","Search Matrix Overview"],["dealerCDS","Search Dealer &CDS"],["dealerAccepts","Search Dealer &Accepts"],["dealerOG","Search Dealer &OfferGuards"],["dealerPuts","Search Dealer P&uts"],["phoneFormatPara","Fo&rmat Phone: (###) ###-####"]]
+		for _, j in [["searchVXDealer","Search V&XDealer"],["dealerstats","Search DealerStats"],["auctionCaps","Search Auction Caps"],["dealerExclu","Search Dealer Exclusions"],["matrixOverview","Search Matrix Overview"],["dealerCDS","Search Dealer &CDS"],["dealerAccepts","Search Dealer &Accepts"],["dealerOG","Search Dealer &OfferGuards"],["dealerPuts","Search Dealer P&uts"],["phoneFormatPara","Fo&rmat Phone: (###) ###-####"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -445,6 +445,24 @@ auctionCaps(){
 	ShellRun(openLink)
 	return
 }
+
+;~ http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerExclusions
+
+dealerExclu(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	Clipboard := searchTerm
+	dealershipID := getDealerID(searchTerm)
+	if (dealershipID  = "") {
+		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		return
+	}
+	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerExclusions&p_dealershipID=%dealershipID%
+	;~ openlink := URI_URLEncode(openLink)
+	ShellRun(openLink)
+	return
+}
+
 
 dealerCDS(){
 	searchTerm := searchTermClean()
