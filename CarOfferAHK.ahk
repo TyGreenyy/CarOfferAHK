@@ -35,6 +35,7 @@ updateScript() {                     ;Create Directory Structure - Update script
 
   UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/DealerCodes.ini, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
   UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/CarOfferAHK_Rounded.ico, %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
+  UrlDownloadToFile, https://github.com/TyGreenyy/CarOfferAHK/raw/main/resources/imageres.dll, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll
 
   whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")               ;Create HTTP request to check version
   whr.Open("GET", "https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/version.md", true)
@@ -107,7 +108,7 @@ SetNumLockState, On
 
 trayMenu(){
 	ifexist %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
-		Menu, Tray, Icon, %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
+		Menu, Tray, Icon, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll, 2
 }
 
 use_TrayIcon(Script, Action) { ; use tray icon actions of a running AHK script
@@ -132,42 +133,47 @@ use_TrayIcon(Script, Action) { ; use tray icon actions of a running AHK script
 class caseMenu {
 	__new(){
 
-		for _, j in [["prefaceTime","&Paste TimeStamp"],["truePeopleSearch","Search &True People"],["phoneFormatPara","Format P&hone: (###) ###-####"]]
+		for _, j in [["truePeopleSearch","Search &True People","14"],["phoneFormatPara","Format P&hone: (###) ###-####","12"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
 			Menu, caseMenu, Add, % j[2], % act
+			Menu, caseMenu, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
 		}
 
 		;Seperator One
 		Menu, caseMenu, Add
 
-		for _, j in [["VINAnalysis","Search &VIN"],["jiraFunc","Search &JIRA"],["carGurus","Search Car&Gurus"],["searchHubspot","Search &Hubspot"],["handsellCopy","Copy Handsell Unit"],["vehicleinfopaste","&Year Make Model - VIN"],["yearmakemodelformat2","Year Make Model - V&IN - $"]]
+		for _, j in [["VINAnalysis","Search &VIN","2"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["handsellCopy","Copy Handsell Unit","16"],["vehicleinfopaste","&Year Make Model - VIN","17"],["yearmakemodelformat2","Year Make Model - V&IN - $","17"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
 			Menu, caseMenu, Add, % j[2], % act
+			Menu, caseMenu, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
 		}
 
 		;Seperator Two
 		Menu, caseMenu, Add
 
-		for _, j in [["searchVXDealer","Search V&XDealer"],["dealerstats","Search DealerStats"],["dealerCDS","Search Dealer &CDS"]]
+		for _, j in [["searchVXDealer","Search V&XDealer","13"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
 			Menu, caseMenu, Add, % j[2], % act
+			Menu, caseMenu, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
 		}
 
 		;Seperator Three
 		; Menu, caseMenu, Add
 
-		for _, j in [["auctionCaps","Search Auction Caps"],["dealerExclu","Search Dealer Exclusions"],["matrixOverview","Search Matrix Overview"],["dealerAccepts","Search Dealer &Accepts"],["dealerOG","Search Dealer &OfferGuards"],["dealerPuts","Search Dealer P&uts"]]
+		for _, j in [["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
 			Menu, DealerInfo, Add, % j[2], % act
 			Menu, caseMenu, Add, &Dealer Info, :DealerInfo
+			Menu, caseMenu, Icon, &Dealer Info, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , 2
+			Menu, DealerInfo, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
 		}
 
 		;Seperator Four
