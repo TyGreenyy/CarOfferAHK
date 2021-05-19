@@ -141,6 +141,16 @@ class caseMenu {
 			Menu, caseMenu, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
 		}
 
+		FormatTime, OutputVar, %A_Now%, MMM dd, yyyy 'at' h:mm tt CST
+		for _, j in [[OutputVar]]
+
+		{
+			Menu, caseMenu, add, Paste "%OutputVar%", DateAction
+			Menu, caseMenu, Icon, Paste "%OutputVar%", %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , 5
+		}
+
+
+
 		;Seperator One
 		Menu, caseMenu, Add
 
@@ -267,6 +277,12 @@ class caseMenu {
 				%type%()
 			return
 			}
+
+}
+
+DateAction(type) {
+		SendInput %A_ThisMenuItem%{Raw}%A_EndChar%
+	Return
 }
 
 Togglekeys_check(){
