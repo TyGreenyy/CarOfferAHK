@@ -152,7 +152,7 @@ class caseMenu {
 		;Seperator Two
 		Menu, caseMenu, Add
 
-		for _, j in [["searchVXDealer","Search V&XDealer"],["dealerstats","Search DealerStats"],["auctionCaps","Search Auction Caps"],["dealerExclu","Search Dealer Exclusions"],["matrixOverview","Search Matrix Overview"],["dealerCDS","Search Dealer &CDS"],["dealerAccepts","Search Dealer &Accepts"],["dealerOG","Search Dealer &OfferGuards"],["dealerPuts","Search Dealer P&uts"],["phoneFormatPara","Fo&rmat Phone: (###) ###-####"]]
+		for _, j in [["searchVXDealer","Search V&XDealer"],["dealerstats","Search DealerStats"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -162,11 +162,12 @@ class caseMenu {
 		;Seperator Three
 		Menu, caseMenu, Add
 
-		for _, j in [["cutFunc","Cut"],["copyFunc","Copy"],["pasteFunc","Paste"],["deleteFunc","Delete"]]
+		for _, j in [["auctionCaps","Search Auction Caps"],["dealerExclu","Search Dealer Exclusions"],["matrixOverview","Search Matrix Overview"],["dealerCDS","Search Dealer &CDS"],["dealerAccepts","Search Dealer &Accepts"],["dealerOG","Search Dealer &OfferGuards"],["dealerPuts","Search Dealer P&uts"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
-			Menu, caseMenu, Add, % j[2], % act
+			Menu, DealerInfo, Add, % j[2], % act
+			Menu, caseMenu, Add, &Dealer Info, :DealerInfo
 		}
 
 		;Seperator Four
@@ -457,7 +458,7 @@ dealerExclu(){
 		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
 		return
 	}
-	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerExclusions&pDealershipID%=dealershipID%
+	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerExclusions&pDealershipID=%dealershipID%
 	;~ openlink := URI_URLEncode(openLink)
 	ShellRun(openLink)
 	return
