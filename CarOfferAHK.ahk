@@ -457,7 +457,7 @@ dealerExclu(){
 		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
 		return
 	}
-	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerExclusions&rdAjaxCommand=RefreshElement&pDealershipID=%dealershipID%
+	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerExclusions&pDealershipID%dealershipID%
 	;~ openlink := URI_URLEncode(openLink)
 	ShellRun(openLink)
 	return
