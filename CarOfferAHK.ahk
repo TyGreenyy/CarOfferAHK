@@ -5,18 +5,9 @@
 ; Author ........: TyGreeny
 ; =====================================================================================
 
-Suspend, On                     ;Suspend Script for Update
-directoryMove()
-updateScript()
-caseMenu.__new()                ;creates the caseMenu
-trayMenu()                      ;creates the traymenu
-Suspend, Off
-Sleep, 1000
-reloadAsAdmin_Task()         ;Runs reloadAsAdmin task
-
 directoryMove(){
 	if !(A_ScriptDir = A_MyDocuments){
-	FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
+	FileCopy, %A_ScriptDir%\CarOfferAHK.ah k, %A_MyDocuments%\CarOfferAHK.ahk
 	Sleep, 3000
 	Run, %A_MyDocuments%\CarOfferAHK.ahk  /restart
 	Sleep, 200
@@ -47,7 +38,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   RegExMatch(trim(version), "[0-9]" , version)                  ;Checks version against Github version
   if (version = 4){                                             ;Downloads new .ahk if version does not match
 	  } else {
-	  	UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
+		UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
 		}
 }
 
@@ -56,6 +47,13 @@ updateScript() {                     ;Create Directory Structure - Update script
 ; The directives/commands that are default are commented by ";;" ,
 ; those not needed by ";;;" and those not desired by ";~ "
 ;} ====================================================================================
+
+Suspend, On                     ;Suspend Script for Update
+directoryMove()
+updateScript()
+caseMenu.__new()                ;creates the caseMenu
+trayMenu()                      ;creates the traymenu
+
 
 #SingleInstance Force
 #include %A_ScriptDir%
@@ -100,35 +98,27 @@ CoordMode, Caret, Screen        ;A_CaretX/Y are specified in global co-ords
 CoordMode, Menu, Screen         ;Co-ords for "Menu, Show" are specified in global co-ords
 SetNumLockState, On
 
-; global hotcornersdelay:=1       ;Hotcorners Default Delay setting
-; global toprightdelay:=8         ;Hotcorners TopRight Delay setting
-; global topcenterdelay:=6        ;Hotcorners TopCenter Delay setting
-; global bottomleftdelay:=4       ;Hotcorners TopCenter Delay setting
-; global rightsidedelay:=3        ;Hotcorners TopCenter Delay setting
-
 trayMenu(){
 	ifexist %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
 		Menu, Tray, Icon, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll, 2
 }
 
-use_TrayIcon(Script, Action) { ; use tray icon actions of a running AHK script
-	static a := { Open: 65300, Help:    65301, Spy:   65302, Reload: 65303
-				, Edit: 65304, Suspend: 65305, Pause: 65306, Exit:   65307 }
-	DetectHiddenWindows, On
-	PostMessage, 0x111, % a[Action],,, %Script% - AutoHotkey
-}
+
+Suspend, Off
+Sleep, 1000
+reloadAsAdmin_Task()         ;Runs reloadAsAdmin task
 
 ;{==================================ToggleKeys=========================================
 ;} ====================================================================================
 
-; CapsLockOffTimer(t:=60000){
-;   if ((A_TimeIdleKeyboard>t) AND GetKeyState("CapsLock","T")){
-;       SetCapsLockState,Off
-;       Toast.show("CapsLock Turned Off")
-;       return True
-;   }
-;   return False
-; }
+CapsLockOffTimer(t:=30000){
+  if ((A_TimeIdleKeyboard>t) AND GetKeyState("CapsLock","T")){
+	  SetCapsLockState,Off
+	  Toast.show("CapsLock Turned Off")
+	  return True
+  }
+  return False
+}
 
 DateAction:
 	DatePaste := StrReplace(A_ThisMenuItem, "Paste: ", "")
