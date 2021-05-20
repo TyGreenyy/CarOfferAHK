@@ -103,6 +103,12 @@ trayMenu(){
 		Menu, Tray, Icon, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll, 2
 }
 
+use_TrayIcon(Script, Action) { ; use tray icon actions of a running AHK script
+	static a := { Open: 65300, Help:    65301, Spy:   65302, Reload: 65303
+				, Edit: 65304, Suspend: 65305, Pause: 65306, Exit:   65307 }
+	DetectHiddenWindows, On
+	PostMessage, 0x111, % a[Action],,, %Script% - AutoHotkey
+}
 
 Suspend, Off
 Sleep, 1000
