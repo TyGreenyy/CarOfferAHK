@@ -428,14 +428,14 @@ searchVXDealer(){
 getDealerID(searchTerm){
    FileRead, FileText, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
 		Data := {}
+		SearchLine := "i)" . searchTerm 
 		Loop, Parse, FileText, `n , `r
 		{
-		linetext := StrSplit(A_Loopfield, A_Tab)
-		SearchLine := "i)" . searchTerm
-			if (RegExMatch(linetext[3], SearchLine))
-			dealershipID := linetext[1]
-	   }
-	   return dealershipID
+		if (RegExMatch(A_Loopfield, SearchLine)){
+			linetext := StrSplit(A_Loopfield, A_tab)
+				return linetext[1]
+			}
+		}
  }
 
 dealerstats(){
