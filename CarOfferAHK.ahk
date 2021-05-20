@@ -431,7 +431,7 @@ getDealerID(searchTerm){
 		Loop, Parse, FileText, `n , `r
 		{
 		linetext := StrSplit(A_Loopfield, A_Tab)
-		SearchLine := "i)"searchTerm
+		SearchLine := "i)" . searchTerm
 			if (RegExMatch(linetext[3], SearchLine))
 			dealershipID := linetext[1]
 	   }
