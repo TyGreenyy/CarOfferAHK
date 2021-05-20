@@ -5,16 +5,19 @@
 ; Author ........: TyGreeny
 ; =====================================================================================
 
+reloadAsAdmin_Task()         ;Runs reloadAsAdmin task
+Suspend, On                     ;Suspend Script for Update
+
 directoryMove(){
 	if !(A_ScriptDir = A_MyDocuments){
-	FileCopy, %A_ScriptDir%\CarOfferAHK.ah k, %A_MyDocuments%\CarOfferAHK.ahk
-	Sleep, 3000
-	Run, %A_MyDocuments%\CarOfferAHK.ahk  /restart
-	Sleep, 200
-	ExitApp
+		FileCopy, %A_ScriptDir%\CarOfferAHK.ah k, %A_MyDocuments%\CarOfferAHK.ahk
+		Sleep, 3000
+		Run, %A_MyDocuments%\CarOfferAHK.ahk  /restart
+		Sleep, 200
+		ExitApp
 	} else {
-	FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
-	}
+		FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
+		}
 	return
 }
 
@@ -24,7 +27,7 @@ updateScript() {                     ;Create Directory Structure - Update script
 	  FileCreateDir, %A_MyDocuments%\CarOfferAHK\              ;Create Directory Structure 
 	  FileCreateDir, %A_MyDocuments%\CarOfferAHK\resources\             ;Create Directory Structure
 
-  UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/DealerCodes.ini, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
+ UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/DealerCodes.ini, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
   UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/CarOfferAHK_Rounded.ico, %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
   UrlDownloadToFile, https://github.com/TyGreenyy/CarOfferAHK/raw/main/resources/imageres.dll, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll
 
@@ -38,7 +41,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   RegExMatch(trim(version), "[0-9]" , version)                  ;Checks version against Github version
   if (version = 4){                                             ;Downloads new .ahk if version does not match
 	  } else {
-		UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
+		 UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
 		}
 }
 
@@ -48,12 +51,11 @@ updateScript() {                     ;Create Directory Structure - Update script
 ; those not needed by ";;;" and those not desired by ";~ "
 ;} ====================================================================================
 
-Suspend, On                     ;Suspend Script for Update
+
 directoryMove()
 updateScript()
 caseMenu.__new()                ;creates the caseMenu
-trayMenu()                      ;creates the traymenu
-
+trayMenu()                      ;creates th etraymenu
 
 #SingleInstance Force
 #include %A_ScriptDir%
@@ -68,7 +70,7 @@ SplitPath, A_MyDocuments, , SCR_UserDir, , ,s
 
 global SCR_Path = A_ScriptDir   ;Sets path for tray menu options
 
-#NoEnv                          ;Donot use default environmental variables.
+#NoEnv                           ;Donot use default environmental variables.
 #Persistent                     ;Keeps a script permanently running
 #SingleInstance Force           ;Replaces old instance with new one
 #UseHook                        ;For machine level hotkeys. Removes need to use $ in hotkeys
@@ -103,16 +105,8 @@ trayMenu(){
 		Menu, Tray, Icon, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll, 2
 }
 
-use_TrayIcon(Script, Action) { ; use tray icon actions of a running AHK script
-	static a := { Open: 65300, Help:    65301, Spy:   65302, Reload: 65303
-				, Edit: 65304, Suspend: 65305, Pause: 65306, Exit:   65307 }
-	DetectHiddenWindows, On
-	PostMessage, 0x111, % a[Action],,, %Script% - AutoHotkey
-}
-
 Suspend, Off
-Sleep, 1000
-reloadAsAdmin_Task()         ;Runs reloadAsAdmin task
+
 
 ;{==================================ToggleKeys=========================================
 ;} ====================================================================================
