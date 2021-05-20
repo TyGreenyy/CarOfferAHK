@@ -111,15 +111,17 @@ Suspend, Off
 ;{==================================ToggleKeys=========================================
 ;} ====================================================================================
 
-CapsLockOffTimer(t:=30000){
-  if ((A_TimeIdleKeyboard>t) AND GetKeyState("CapsLock","T")){
-	  SetCapsLockState,Off
-	  Toast.show("CapsLock Turned Off")
-	  return True
-  }
-  return False
-}
+; CapsLockOffTimer(t:=60000){
+;  if ((A_TimeIdleKeyboard>t) AND GetKeyState("CapsLock","T")){
+;	  SetCapsLockState,Off
+;	  ; SetTimer, CapsLockOffTimer, Off
+;	  Toast.show("CapsLock Turned Off")
+;	  return True
+;  }
+;  return False
+;}
 
+return
 DateAction:
 	DatePaste := StrReplace(A_ThisMenuItem, "Paste: ", "")
 	SendInput %DatePaste%{Raw}%A_EndChar%
@@ -158,25 +160,12 @@ class caseMenu {
 		;Seperator Two
 		Menu, caseMenu, Add
 
-		for _, j in [["searchVXDealer","Search V&XDealer","13"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"]]
+		for _, j in [["searchVXDealer","Search V&XDealer","13"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
 			Menu, caseMenu, Add, % j[2], % act
 			Menu, caseMenu, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
-		}
-
-		;Seperator Three
-		; Menu, caseMenu, Add
-
-		for _, j in [["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
-
-		{
-			act:=ObjBindMethod(this,"textFormat",j[1])
-			Menu, DealerInfo, Add, % j[2], % act
-			Menu, caseMenu, Add, &Dealer Info, :DealerInfo
-			Menu, caseMenu, Icon, &Dealer Info, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , 2
-			Menu, DealerInfo, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
 		}
 
 		;Seperator Four
@@ -428,6 +417,32 @@ getDealerID(searchTerm){
 		if (RegExMatch(A_Loopfield, SearchLine)){
 			linetext := StrSplit(A_Loopfield, A_tab)
 				return linetext[1]
+			}
+		}
+ }
+
+ getCompanyID(searchTerm){
+   FileRead, FileText, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
+		Data := {}
+		SearchLine := "i)" . searchTerm 
+		Loop, Parse, FileText, `n , `r
+		{
+		if (RegExMatch(A_Loopfield, SearchLine)){
+			linetext := StrSplit(A_Loopfield, A_tab)
+				return linetext[5]
+			}
+		}
+ }
+
+ getGroupID(searchTerm){
+   FileRead, FileText, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
+	Data := {}
+		SearchLine := "i)" . searchTerm 
+		Loop, Parse, FileText, `n , `r
+		{
+		if (RegExMatch(A_Loopfield, SearchLine)){
+			linetext := StrSplit(A_Loopfield, A_tab)
+				return linetext[9]
 			}
 		}
  }
@@ -2610,4 +2625,6 @@ escKey:
 	escPresses := 0
 return
 
+
+return
 ExitApp
