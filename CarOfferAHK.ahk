@@ -160,7 +160,7 @@ class caseMenu {
 		;Seperator Two
 		Menu, caseMenu, Add
 
-		for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
+		for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -398,6 +398,18 @@ searchHubspot(){
 	} else {
 		openLink := "https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=" . searchTerm
 		Toast.show({title:{text:(openLink)},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+	}
+	Shellrun(openLink)
+}
+
+groupWholeSale(){
+	searchTerm := getSelectedText()
+	GroupID := getDealerID(Trim(searchTerm))
+	if !(GroupID[9] = "") {
+		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerInventoryOffers&p_groupid="  . GroupID[9] . "&p_reportType=&p_wholesale=W&LinkHref=True"
+		Toast.show({title:{text:(openLink)},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+	} else {
+		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
 	}
 	Shellrun(openLink)
 }
