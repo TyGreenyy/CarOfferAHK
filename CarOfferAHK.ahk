@@ -390,9 +390,16 @@ searchTermClean(){
 }
 
 searchHubspot(){
-	searchTerm := searchTermClean()
-	Run, https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=%searchTerm%
-	return
+	searchTerm := getSelectedText()
+	hubspotID := getDealerID(Trim(searchTerm))
+	if !(hubspotID[5] = "") {
+		openLink := "https://app.hubspot.com/contacts/5712725/company/" . hubspotID[5]
+		Toast.show({title:{text:(openLink)},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+	} else {
+		openLink := "https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=" . searchTerm
+		Toast.show({title:{text:(openLink)},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+	}
+	Shellrun(openLink)
 }
 
 searchVXDealer(){
