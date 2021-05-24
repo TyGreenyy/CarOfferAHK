@@ -405,12 +405,10 @@ groupWholeSale(){
 	dealershipID := GroupID[1]
 	GroupID := GroupID[5]
 	if !(GroupID = "") {
-		Msgbox % "gID" GroupID
 		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerInventoryOffers&p_groupid="  . GroupID . "&p_reportType=&p_wholesale=W&LinkHref=True"
 			toast("Opening Dealer Group Wholesale", openLink, ,5000)
 			Shellrun(openLink)
 	} else if !(dealershipID = "") {
-		Msgbox % "dID" dealershipID
 		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerInventoryOffers&p_dealershipid="  . dealershipID . "&p_reportType=&p_wholesale=W&LinkHref=True"
 			toast("Opening Dealer Wholesale", openLink, ,2000)
 			Shellrun(openLink)
