@@ -2554,7 +2554,7 @@ toast(t, msg, s:=14, l:=2000) {
 		Gui, %GUI_handle%: Add, Text, +Center w600, %msg%
 		Gui, %GUI_handle%: Show, autosize x%pX% y%pY%, NoActivate
 		setTimer, closeGUI, % "-"l
-		closekeys:=["~Space","return","~LButton","Esc"]
+		closekeys:=["~Space","~LButton","Esc"]
 		for _,k in closekeys
 			Hotkey, % k , closeGUI, On B0 T1
 		return
