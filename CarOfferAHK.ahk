@@ -39,16 +39,14 @@ updateScript() {                     ;Create Directory Structure - Update script
   global version := whr.ResponseText
 
   RegExMatch(trim(version), "[0-9]" , version)                  ;Checks version against Github version
-  if (version = 7){                                             ;Downloads new .ahk if version does not match
+  if (version = 8){                                             ;Downloads new .ahk if version does not match
       } else {
          UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
         }
 }
 
-
 ;{ ============================== Copy From ===============================================
 ;} ====================================================================================
-
 
 ;{ ============================== Notes ===============================================
 ; All directives(that are settings) and many commands appear here irvrespective of its need
@@ -56,9 +54,8 @@ updateScript() {                     ;Create Directory Structure - Update script
 ; those not needed by ";;;" and those not desired by ";~ "
 ;} ====================================================================================
 
-
-directoryMove()
-updateScript()
+; directoryMove()
+; updateScript()
 caseMenu.__new()                ;creates the caseMenu
 trayMenu()                      ;creates th etraymenu
 
@@ -112,7 +109,6 @@ trayMenu(){
 
 Suspend, Off
 
-
 ;{==================================ToggleKeys=========================================
 ;} ====================================================================================
 
@@ -120,7 +116,6 @@ Suspend, Off
 ;  if ((A_TimeIdleKeyboard>t) AND GetKeyState("CapsLock","T")){
 ;     SetCapsLockState,Off
 ;     ; SetTimer, CapsLockOffTimer, Off
-;     Toast.show("CapsLock Turned Off")
 ;     return True
 ;  }
 ;  return False
@@ -217,8 +212,8 @@ class caseMenu {
 		act:=ObjBindMethod(this,"textFormat",j[1])
 		Menu, Submenu1, Add, % j[2], % act
 	}
-	
-			/*        
+
+			/*
 			for _, i in ["&Capslock","&Numlock","Sc&rollLock","I&nsert"] {
 			act:=ObjBindMethod(this,"toggle",strReplace(i,"&"))
 			Menu, caseMenu, Add, % i, % act
@@ -226,10 +221,9 @@ class caseMenu {
 			*/
 	return
 	}
-	
+
 	show() {
 /*        for _, i in ["&Numlock","Sc&rollLock","I&nsert"]
-			;~ Toast.show("caseMenu")
 		;~ sleep, 500*
 		for _, i in ["&Numlock","Sc&rollLock","I&nsert"]
 			Menu, caseMenu, % GetKeyState(strReplace(i,"&"),"T")?"Check":"Uncheck", % i
@@ -264,8 +258,7 @@ class caseMenu {
 				%type%()
 			return
 			}
-
-}
+		}
 
 DateAction(type) {
 		SendInput %A_ThisMenuItem%{Raw}%A_EndChar%
@@ -301,7 +294,6 @@ TGL_ExpWinGetSel(){
 	WinGet, hwndtmp, ID, A
 	WinActivate, %hwndtmp%,
 	Clipboard := JEE_ExpWinGetSel(hwndtmp)
-	Toast.show({title:{size:12,text:(Clipboard)},life:1000})
 }
 
 TGL_ExpWinGetSel_Private(){
@@ -318,12 +310,10 @@ TGL_ExpWinGetSel_Private(){
 		; MsgBox, 4, , Line number %A_Index% is %A_LoopField%.`n`nContinue?
 		; IfMsgBox, No, break
 	}
-	Toast.show({title:{size:12,text:(Clipboard)},life:1000})
 }
 
 TGL_ExpWinGetDir(){
 	Clipboard := JEE_ExpWinGetDir()
-	Toast.show({title:{size:12,text:(Clipboard)},life:1000})
 }
 
 cutFunc(){
@@ -387,6 +377,7 @@ searchTermClean(){
 	if (oldClip2 != "")
 		searchTerm := oldClip2
 	searchTerm := LTrim(searchTerm)
+	searchTerm := StrReplace(StrReplace(searchTerm, "`n", ""), "`r", "")
 	searchTerm := RegExReplace(RegExReplace(searchTerm, "[\']", ""), "\W", " ")
 	searchTerm := StrSplit(searchTerm, A_Space)
 	searchTerm := searchTerm[1] " " searchTerm[2] " " searchTerm[3] " " searchTerm[4]
@@ -395,34 +386,37 @@ searchTermClean(){
 }
 
 searchHubspot(){
-	searchTerm := getSelectedText()
+	searchTerm := searchTermClean()
 	hubspotID := getDealerID(Trim(searchTerm))
 	hubspotID := hubspotID[3]
 	if !(hubspotID = "") {
 		openLink := "https://app.hubspot.com/contacts/5712725/company/" . hubspotID
-		Toast.show({title:{text:(openLink)},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("Opening Dealer Record in Hubspot", openLink, ,2000)
 	} else {
 		openLink := "https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=" . searchTerm
-		Toast.show({title:{text:(openLink)},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+			toast("Opening Hubspot and Searching:", searchTerm, ,2000)
 	}
 	Shellrun(openLink)
 }
 
 groupWholeSale(){
-	searchTerm := getSelectedText()
+	searchTerm := searchTermClean()
 	GroupID := getDealerID(Trim(searchTerm))
 	dealershipID := GroupID[1]
 	GroupID := GroupID[5]
 	if !(GroupID = "") {
+		Msgbox % "gID" GroupID
 		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerInventoryOffers&p_groupid="  . GroupID . "&p_reportType=&p_wholesale=W&LinkHref=True"
+			toast("Opening Dealer Group Wholesale", openLink, ,5000)
 			Shellrun(openLink)
-		Toast.show({title:{text:(openLink)},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
 	} else if !(dealershipID = "") {
+		Msgbox % "dID" dealershipID
 		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerInventoryOffers&p_dealershipid="  . dealershipID . "&p_reportType=&p_wholesale=W&LinkHref=True"
+			toast("Opening Dealer Wholesale", openLink, ,2000)
 			Shellrun(openLink)
-		Toast.show({title:{text:(openLink)},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
 	} else {
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+
 	}
 
 }
@@ -431,19 +425,17 @@ searchVXDealer(){
 	searchTerm := searchTermClean()
 	searchTerm := StrReplace(searchTerm, " ", "%20")
 	if (searchTerm = "") {
-		Toast.show({title:{text:("*******Check dText*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
-		return
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 	}
 	openlink := "https://admin.pearlsolutions.com/Home/Portal#/dealerships?search=" . searchTerm
-	;~ openlink := URI_URLEncode(openLink)
-	Toast.show({title:{text:(searchTerm)},sound:True,life:2000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+	toast("Opening Dealer Search in VX Admin", openLink, ,2000)
 	ShellRun(openlink)
 }
 
 getDealerID(searchTerm){
    FileRead, FileText, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
 		Data := {}
-		SearchLine := "i)" . searchTerm 
+		SearchLine := "i)" . searchTerm
 		Loop, Parse, FileText, `n , `r
 		{
 		if (RegExMatch(A_Loopfield, SearchLine)){
@@ -453,10 +445,10 @@ getDealerID(searchTerm){
 		}
  }
 
- getGroupID(searchTerm){
+getGroupID(searchTerm){
    FileRead, FileText, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
 	Data := {}
-		SearchLine := "i)" . searchTerm 
+		SearchLine := "i)" . searchTerm
 		Loop, Parse, FileText, `n , `r
 		{
 		if (RegExMatch(A_Loopfield, SearchLine)){
@@ -473,10 +465,11 @@ dealerstats(){
 	dealershipID := getDealerID(searchTerm)
 	dealershipID := dealershipID[1]
 	if (dealershipID  = "") {
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
 	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerStatsSummary&p_dealershipIDs=%dealershipID%
+	toast("Opening DealerStatsSummary", openLink, ,2000)
 	;~ openlink := URI_URLEncode(openLink)
 	ShellRun(openLink)
 	return
@@ -489,10 +482,11 @@ auctionCaps(){
 	dealershipID := getDealerID(searchTerm)
 	dealershipID := dealershipID[1]
 	if (dealershipID  = "") {
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
 	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.Auction.MMRCapsNew&p_dealershipID=%dealershipID%
+	toast("Opening Dealer Auction Caps", openLink, ,2000)
 	;~ openlink := URI_URLEncode(openLink)
 	ShellRun(openLink)
 	return
@@ -507,15 +501,15 @@ dealerExclu(){
 	dealershipID := getDealerID(searchTerm)
 	dealershipID := dealershipID[1]
 	if (dealershipID  = "") {
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
 	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerExclusions&pDealershipID=%dealershipID%
+	toast("Opening Dealer Exclusions", openLink, ,2000)
 	;~ openlink := URI_URLEncode(openLink)
 	ShellRun(openLink)
 	return
 }
-
 
 dealerCDS(){
 	searchTerm := searchTermClean()
@@ -524,11 +518,12 @@ dealerCDS(){
 	dealershipID := getDealerID(searchTerm)
 	dealershipID := dealershipID[1]
 	if (dealershipID  = "") {
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
 	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&islDealer=%dealershipID%&LinkHref=True=
 	openlink := URI_URLEncode(openLink)
+	toast("Opening Dealer CDS Report", openLink, ,2000)
 	ShellRun(openLink)
 	return
 }
@@ -542,11 +537,12 @@ dealerAccepts(){
 	dealershipID := getDealerID(searchTerm)
 	dealershipID := dealershipID[1]
 	if (dealershipID  = "") {
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
 	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=%dealershipID%&p_offerAccept=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form
 	openlink := URI_URLEncode(openLink)
+	toast("Opening Dealer Accepted Offers", openLink, ,2000)
 	ShellRun(openLink)
 	return
 }
@@ -558,11 +554,12 @@ dealerOG(){
 	dealershipID := getDealerID(searchTerm)
 	dealershipID := dealershipID[1]
 	if (dealershipID  = "") {
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
 	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=%dealershipID%&p_offerAccept=&p_og=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form
 	openlink := URI_URLEncode(openLink)
+	toast("Opening Dealer OfferGuards", openLink, ,2000)
 	ShellRun(openLink)
 	return
 }
@@ -574,11 +571,12 @@ dealerPuts(){
 	dealershipID := getDealerID(searchTerm)
 	dealershipID := dealershipID[1]
 	if (dealershipID  = "") {
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
 	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=%dealershipID%&p_offerAccept=&p_putAccept=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form
 	openlink := URI_URLEncode(openLink)
+	toast("Opening Dealer Put Bids", openLink, ,2000)
 	ShellRun(openLink)
 	return
 }
@@ -586,15 +584,16 @@ dealerPuts(){
 VINAnalysis(){
 	searchTerm := Trim(searchTermClean())
 	if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Complete VIN")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
 		return
 	}
 	if !(StrLen(searchTerm) = 17){
 		; Check VIN
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Complete VIN")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
 		return
 	}
 	openLink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixAnalysis&p_action=R&p_requestID=&VIN=%searchTerm%&rdDisableRememberExpansion_menuTreeSide=True&p_vin=%searchTerm%&rdShowElementHistory=
+	toast("Searching VIN Analysis", openLink, ,2000)
 	shellrun(openLink)
 	Clipboard := searchTerm
 	return
@@ -607,11 +606,12 @@ matrixOverview(){
 	dealershipID := getDealerID(searchTerm)
 	dealershipID := dealershipID[1]
 	if (dealershipID  = "") {
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Dealer Name")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
 	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixOverview&p_dealershipID=%dealershipID%&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form
 	openlink := URI_URLEncode(openLink)
+	toast("Opening Dealer Matrix Overview", openLink, ,2000)
 	ShellRun(openLink)
 	return
 }
@@ -620,6 +620,7 @@ jiraFunc(){
 	searchTerm := searchTermClean()
 	openLink = https://caroffer.atlassian.net/secure/QuickSearch.jspa?searchString=%searchTerm%
 	shellrun(openLink)
+	toast("Searching JIRA", openLink, ,2000)
 	clipboardLink = %searchTerm%
 	Clipboard := clipboardLink
 }
@@ -627,17 +628,16 @@ jiraFunc(){
 carGurus(){
 	searchTerm := Trim(searchTermClean())
 	if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Complete VIN")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
 		return
 	}
 	if !(StrLen(searchTerm) = 17){
-		; Check VIN
-		Toast.show({title:{text:("*******Check Text*******`n`nHighlight a Complete VIN")},sound:false,life:10000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+		toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
 		return
 	}
 	carGurus := "https://www.cargurus.com/Cars/instantMarketValueFromVIN.action?startUrl=%2F&++++carDescription.vin%0D%0A=" . searchTerm
 	ShellRun(carGurus)
-	Toast.show({title:{size:12,text:(carGurus)},life:1500,pos:{x:A_CaretX,y:A_CaretY-70}})
+	toast("Searching CarGurus Instant Market Value", openLink, ,2000)
 	Clipboard := carGurus
 }
 
@@ -665,7 +665,6 @@ yearmakemodelformat(){
 	YearMakeModel := caseChange(Yeavar,"T")
 	YearMakeModelVin2 := caseChange(YearMakeModelVin2,"T")
 	YearMakeModelVin := YearMakeModelVin2 " - " VinNumbervar
-	Toast.show({title:{text:(YearMakeModelVin)},sound:false,life:2000,trans:200})
 	Clipboard := YearMakeModelVin
 	return
 }
@@ -698,11 +697,12 @@ yearmakemodelformat2(){
 			searchTermFinal := searchTermFinal " - Sell Today: " offerVar
 		}
 	   }
-	if (searchTermFinal)
-		Toast.show({title:{text:(searchTermFinal)},sound:false,life:2000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
-	else
-		Toast.show({title:{text:("Check Copy")},sound:false,life:2000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+	if (searchTermFinal){
+	} else {
+		toast("Tip:", "`nHighlight Right to Left`nfrom Sell Today to the Year Make Model ", ,5000)
+	}
 	Clipboard := searchTermFinal
+	toast("Success! Copied to Clipboard:", searchTermFinal, ,3000)
 	return
 }
 
@@ -718,13 +718,12 @@ vehicleinfopaste(){
 	}
 	Clipboard_One := caseChange(Clipboard_One, "T")
 	searchTerm := Clipboard_One " - " Clipboard_Last
-	Toast.show({title:{text:(searchTerm)},sound:false,life:2000,trans:200})
 	Clipboard := searchTerm
 		return
 }
 
 handsellCopy(){
-	Send, ^c 
+	Send, ^c
 	Sleep, 50
 	test := Clipboard
 	Vehicle := StrSplit(test, "`n")
@@ -741,7 +740,7 @@ handsellCopy(){
 		Price := "$" SubStr(Price, -(StrLen(Price)), (StrLen(Price)-3)) "," SubStr(Price, -2, 3)
 	RegExMatch(test, "Miles:(.*)", Miles)
 		if (VIN2 = "") OR (Price = "") OR (Miles = "") {
-			Toast.show({title:{text:("         *******Check Text*******`n`n                  Highlight from`n'Recall Count' to 'Year Make Model'")},sound:false,life:10000,trans:200})
+			toast("Tip:", "`nHighlight Right to Left`nfrom Recall Count to the Year Make Model ", ,5000)
 			Return
 		}
 	html := WinClip.GetHTML()
@@ -749,7 +748,7 @@ handsellCopy(){
 	regex := RegExMatch(html, regexformula, hreflink)
 	hreflink := StrSplit(hreflink, "=""")
 	texttopaste := Vehicle " - " VIN " - " Miles " - " Price "`n" hreflink[2]
-	Toast.show({title:{text:(texttopaste)},sound:false,life:2000,trans:200,pos:{x:A_CaretX,y:A_CaretY-70}})
+	toast("Success! Copied to Clipboard:", texttopaste, ,3000)
 	Clipboard := texttopaste
 	return
 }
@@ -761,7 +760,6 @@ googlefileDownload(){
 	searchTerm := StrSplit(searchTerm, "/")
 	searchTerm := searchTerm[3]
 	googlefileDownload := "https://drive.google.com/uc?export=download&id=" . searchTerm
-	Toast.show({title:{size:12,text:(googlefileDownload)},life:1000})
 	Clipboard := googlefileDownload
 		return
 }
@@ -769,11 +767,13 @@ googlefileDownload(){
 truePeopleSearch(){
 	phoneFormat := phoneBaseFormat()
 		if (phoneFormat = "")
+			toast("Tip:", "`nHighlight a 10 Digit Phone Number", ,5000)
 			Exit
 	phonenumber := "("phoneFormat[4]")"phoneFormat[5]"-"phoneFormat[6]
 	openLink := "https://www.truepeoplesearch.com/results?phoneno=" phonenumber
 	openlink := URI_URLEncode(openLink)
 	ShellRun(openLink)
+		toast("Opening People Search", openLink, ,2000)
 		return
 }
 
@@ -784,6 +784,7 @@ phoneBaseFormat(){
 		oldClip := oldClip2
 	oldClip := RegExReplace(oldClip, "[^0-9]", "")
 	if (!RegExMatch(oldClip, "^\d{9,11}$")) {
+		toast("Tip:", "`nHighlight a 10 Digit Phone Number", ,5000)
 		Exit
 		}
 	phoneSection1 := SubStr(oldClip, 1, 3)
@@ -798,14 +799,12 @@ phoneBaseFormat(){
 
 phoneFormat(){
 	phoneFormat := phoneBaseFormat()
-	Toast.show({title:{text:(InStr(phoneFormat[1], true)? phoneFormat[1] : "*******No Phone #*******`n`nHighlight a Phone Number")},life:10000,pos:{x:A_CaretX,y:A_CaretY-70}})
 	Clip(phoneFormat[1])
 		return
 }
 
 phoneFormatPara(){
 	phoneFormat := phoneBaseFormat()
-	Toast.show({title:{text:(InStr(phoneFormat[2], true)? phoneFormat[2] : "*******No Phone #*******`n`nHighlight a Phone Number")},life:10000,pos:{x:A_CaretX,y:A_CaretY-70}})
 	Clip(phoneFormat[2], true)
 		return
 }
@@ -838,13 +837,13 @@ cleanRename(){
 		return
 }
 
-;===========================================JEEE================================
+;=========================================JEEE========================================
 ;functions for Desktop and Explorer folder windows:
 ;JEE_ExpWinGetSel ;get selected files (list)
 ;JEE_ExpWinGetDir ;get Explorer window folder
 ;JEE_ExpWinSetDir ;set Explorer window folder (navigate) (or open file/url in new window)
-;==================================================
-;==================================================
+;=====================================================================================
+;=====================================================================================
 
 JEE_ExpWinGetSel(hWnd:=0, vSep:="`n")
 {
@@ -878,7 +877,7 @@ JEE_ExpWinGetSel(hWnd:=0, vSep:="`n")
 	return SubStr(vOutput, 1, -StrLen(vSep))
 }
 
-;==================================================
+;=====================================================================================
 
 JEE_ExpWinGetDir(hWnd:=0)
 {
@@ -905,7 +904,7 @@ JEE_ExpWinGetDir(hWnd:=0)
 	oWindows := oWin := ""
 	return vDir
 }
-;==================================================
+;======================================================================================
 ;{==================================WinClipAPI=========================================
 ;} ====================================================================================
 
@@ -917,11 +916,11 @@ class WinClip_base
 			;return WinClip_base[ aTarget ].( this, aParams* )
 		throw Exception( "Unknown function '" aTarget "' requested from object '" this.__Class "'", -1 )
 	}
-	
+
 	Err( msg ) {
 		throw Exception( this.__Class " : " msg ( A_LastError != 0 ? "`n" this.ErrorFormat( A_LastError ) : "" ), -2 )
 	}
-	
+
 	ErrorFormat( error_id ) {
 		VarSetCapacity(msg,1000,0)
 		if !len := DllCall("FormatMessageW"
@@ -973,7 +972,7 @@ class WinClipAPI extends WinClip_base
 		return DllCall( "SetClipboardData", "Uint", format, "Ptr", hMem )
 	}
 	GetClipboardData( format ) {
-		return DllCall( "GetClipboardData", "Uint", format ) 
+		return DllCall( "GetClipboardData", "Uint", format )
 	}
 	EmptyClipboard() {
 		return DllCall( "EmptyClipboard" )
@@ -1018,13 +1017,13 @@ class WinClipAPI extends WinClip_base
 	IsInteger( var ) {
 		if (var+0 == var) && (Floor(var) == var) ;test for integer while remaining v1 and v2 compatible
 			return True
-		else 
+		else
 			return False
 	}
 	LoadDllFunction( file, function ) {
 			if !hModule := DllCall( "GetModuleHandleW", "Wstr", file, "UPtr" )
 					hModule := DllCall( "LoadLibraryW", "Wstr", file, "UPtr" )
-			
+
 			ret := DllCall("GetProcAddress", "Ptr", hModule, "AStr", function, "UPtr")
 			return ret
 	}
@@ -1062,7 +1061,7 @@ class WinClipAPI extends WinClip_base
 		;~ LONG  biYPelsPerMeter;     28
 		;~ DWORD biClrUsed;           32
 		;~ DWORD biClrImportant;      36
-		
+
 		bmi := &DIB  ;BITMAPINFOHEADER  pointer from DIB
 		biSize := numget( bmi+0, 0, "UInt" )
 		;~ return bmi + biSize
@@ -1084,7 +1083,7 @@ class WinClipAPI extends WinClip_base
 	Gdip_Startup() {
 		if !DllCall( "GetModuleHandleW", "Wstr", "gdiplus", "UPtr" )
 					DllCall( "LoadLibraryW", "Wstr", "gdiplus", "UPtr" )
-		
+
 		VarSetCapacity(GdiplusStartupInput , 3*A_PtrSize, 0), NumPut(1,GdiplusStartupInput ,0,"UInt") ; GdiplusVersion = 1
 		DllCall("gdiplus\GdiplusStartup", "Ptr*", pToken, "Ptr", &GdiplusStartupInput, "Ptr", 0)
 		return pToken
@@ -1177,8 +1176,7 @@ class WinClipAPI extends WinClip_base
 ;{=====================================================================================
 ;} ====================================================================================
 
-
-;{================================WinCLip==========================================
+;{================================WinCLip==============================================
 ;} ====================================================================================
 class WinClip extends WinClip_base
 {
@@ -1187,7 +1185,7 @@ class WinClip extends WinClip_base
 		this.isinstance := 1
 		this.allData := ""
 	}
- 
+
 	_toclipboard( ByRef data, size )
 	{
 		if !WinClipAPI.OpenClipboard()
@@ -1227,7 +1225,7 @@ class WinClip extends WinClip_base
 		WinClipAPI.CloseClipboard()
 		return lastPartOffset
 	}
-	
+
 	_fromclipboard( ByRef clipData )
 	{
 		if !WinClipAPI.OpenClipboard()
@@ -1284,7 +1282,7 @@ class WinClip extends WinClip_base
 		WinClipAPI.CloseClipboard()
 		return structSize
 	}
-	
+
 	_IsInstance( funcName )
 	{
 		if !this.isinstance
@@ -1294,7 +1292,7 @@ class WinClip extends WinClip_base
 		}
 		return 1
 	}
-	
+
 	_loadFile( filePath, ByRef Data )
 	{
 		f := FileOpen( filePath, "r","CP0" )
@@ -1325,7 +1323,7 @@ class WinClip extends WinClip_base
 		WinClipAPI.memcopy( pData, &data, size )
 		return size
 	}
-	
+
 	_getClipData( ByRef data )
 	{
 		if !( clipSize := ObjGetCapacity( this, "allData" ) )
@@ -1336,13 +1334,13 @@ class WinClip extends WinClip_base
 		WinClipAPI.memcopy( &data, pData, clipSize )
 		return clipSize
 	}
-	
+
 	__Delete()
 	{
 		ObjSetCapacity( this, "allData", 0 )
 		return
 	}
-	
+
 	_parseClipboardData( ByRef data, size )
 	{
 		offset := 0
@@ -1366,7 +1364,7 @@ class WinClip extends WinClip_base
 		}
 		return formats
 	}
-	
+
 	_compileClipData( ByRef out_data, objClip )
 	{
 		if !IsObject( objClip )
@@ -1388,14 +1386,14 @@ class WinClip extends WinClip_base
 		}
 		return clipSize
 	}
-	
+
 	GetFormats()
 	{
 		if !( clipSize := this._fromclipboard( clipData ) )
 			return 0
 		return this._parseClipboardData( clipData, clipSize )
 	}
-	
+
 	iGetFormats()
 	{
 		this._IsInstance( A_ThisFunc )
@@ -1403,12 +1401,12 @@ class WinClip extends WinClip_base
 			return 0
 		return this._parseClipboardData( clipData, clipSize )
 	}
-	
+
 	Snap( ByRef data )
 	{
 		return this._fromclipboard( data )
 	}
-	
+
 	iSnap()
 	{
 		this._IsInstance( A_ThisFunc )
@@ -1437,7 +1435,7 @@ class WinClip extends WinClip_base
 			return 0
 		return this._saveFile( filePath, data, size )
 	}
-	
+
 	iSave( filePath )
 	{
 		this._IsInstance( A_ThisFunc )
@@ -1469,13 +1467,13 @@ class WinClip extends WinClip_base
 		WinClipAPI.CloseClipboard()
 		return 1
 	}
-	
+
 	iClear()
 	{
 		this._IsInstance( A_ThisFunc )
 		ObjSetCapacity( this, "allData", 0 )
 	}
-	
+
 	Copy( timeout := 1, method := 1 )
 	{
 		this.Snap( data )
@@ -1489,7 +1487,7 @@ class WinClip extends WinClip_base
 			this.Restore( data )
 		return !ret
 	}
-	
+
 	iCopy( timeout := 1, method := 1 )
 	{
 		this._IsInstance( A_ThisFunc )
@@ -1509,7 +1507,7 @@ class WinClip extends WinClip_base
 		this.Restore( data )
 		return bytesCopied
 	}
-	
+
 	Paste( plainText := "", method := 1 )
 	{
 		ret := 0
@@ -1532,7 +1530,7 @@ class WinClip extends WinClip_base
 			ret := !this._isClipEmpty()
 		return ret
 	}
-	
+
 	iPaste( method := 1 )
 	{
 		this._IsInstance( A_ThisFunc )
@@ -1547,22 +1545,22 @@ class WinClip extends WinClip_base
 		this.Restore( data )
 		return bytesRestored
 	}
-	
+
 	IsEmpty()
 	{
 		return this._isClipEmpty()
 	}
-	
+
 	iIsEmpty()
 	{
 		return !this.iGetSize()
 	}
-	
+
 	_isClipEmpty()
 	{
 		return !WinClipAPI.CountClipboardFormats()
 	}
-	
+
 	_waitClipReady( timeout := 10000 )
 	{
 		start_time := A_TickCount
@@ -1581,7 +1579,7 @@ class WinClip extends WinClip_base
 			return 0
 		return this._setClipData( clipData, clipSize )
 	}
-	
+
 	SetText( textData )
 	{
 		if ( textData = "" )
@@ -1600,7 +1598,7 @@ class WinClip extends WinClip_base
 			return ""
 		return strget( &out_data, out_size, "CP0" )
 	}
-	
+
 	iGetRTF()
 	{
 		this._IsInstance( A_ThisFunc )
@@ -1610,7 +1608,7 @@ class WinClip extends WinClip_base
 			return ""
 		return strget( &out_data, out_size, "CP0" )
 	}
-	
+
 	SetRTF( textData )
 	{
 		if ( textData = "" )
@@ -1620,7 +1618,7 @@ class WinClip extends WinClip_base
 					return 0
 		return this._toclipboard( clipData, clipSize )
 	}
-	
+
 	iSetRTF( textData )
 	{
 		if ( textData = "" )
@@ -1654,7 +1652,7 @@ class WinClip extends WinClip_base
 			return 0
 		return this._setClipData( clipData, clipSize )
 	}
-	
+
 	AppendText( textData )
 	{
 		if ( textData = "" )
@@ -1727,7 +1725,7 @@ class WinClip extends WinClip_base
 		objFormats[ uFmt ].size := sLen
 		return this._compileClipData( clipData, objFormats )
 	}
-	
+
 	_appendText( ByRef clipData, clipSize, textData, IsSet := 0 )
 	{
 		objFormats := this._parseClipboardData( clipData, clipSize )
@@ -1744,7 +1742,7 @@ class WinClip extends WinClip_base
 		objFormats[ uFmt ].size := sLen
 		return this._compileClipData( clipData, objFormats )
 	}
-	
+
 	_getFiles( pDROPFILES )
 	{
 		fWide := numget( pDROPFILES + 0, 16, "uchar" ) ;getting fWide value from DROPFILES struct
@@ -1758,7 +1756,7 @@ class WinClip extends WinClip_base
 		}
 		return list
 	}
-	
+
 	_setFiles( ByRef clipData, clipSize, files, append := 0, isCut := 0 )
 	{
 		objFormats := this._parseClipboardData( clipData, clipSize )
@@ -1791,7 +1789,7 @@ class WinClip extends WinClip_base
 		NumPut( isCut ? 2 : 5, ObjGetAddress( objFormats[ prefFmt ], "buffer" ), 0, "UInt" )
 		return this._compileClipData( clipData, objFormats )
 	}
-	
+
 	SetFiles( files, isCut := 0 )
 	{
 		if ( files = "" )
@@ -1801,7 +1799,7 @@ class WinClip extends WinClip_base
 			return 0
 		return this._toclipboard( clipData, clipSize )
 	}
-	
+
 	iSetFiles( files, isCut := 0 )
 	{
 		this._IsInstance( A_ThisFunc )
@@ -1812,7 +1810,7 @@ class WinClip extends WinClip_base
 			return 0
 		return this._setClipData( clipData, clipSize )
 	}
-	
+
 	AppendFiles( files, isCut := 0 )
 	{
 		if ( files = "" )
@@ -1822,7 +1820,7 @@ class WinClip extends WinClip_base
 			return 0
 		return this._toclipboard( clipData, clipSize )
 	}
-	
+
 	iAppendFiles( files, isCut := 0 )
 	{
 		this._IsInstance( A_ThisFunc )
@@ -1833,7 +1831,7 @@ class WinClip extends WinClip_base
 			return 0
 		return this._setClipData( clipData, clipSize )
 	}
-	
+
 	GetFiles()
 	{
 		if !( clipSize := this._fromclipboard( clipData ) )
@@ -1842,7 +1840,7 @@ class WinClip extends WinClip_base
 			return ""
 		return this._getFiles( &out_data )
 	}
-	
+
 	iGetFiles()
 	{
 		this._IsInstance( A_ThisFunc )
@@ -1852,7 +1850,7 @@ class WinClip extends WinClip_base
 			return ""
 		return this._getFiles( &out_data )
 	}
-	
+
 	_getFormatData( ByRef out_data, ByRef data, size, needleFormat )
 	{
 		needleFormat := (WinClipAPI.IsInteger( needleFormat ) ? needleFormat : WinClipAPI.RegisterClipboardFormat( needleFormat ))
@@ -1877,7 +1875,7 @@ class WinClip extends WinClip_base
 		}
 		return 0
 	}
-	
+
 	_DIBtoHBITMAP( ByRef dibData )
 	{
 		;http://ebersys.blogspot.com/2009/06/how-to-convert-dib-to-bitmap.html
@@ -1889,7 +1887,7 @@ class WinClip extends WinClip_base
 		WinClipAPI.Gdip_Shutdown( gdip_token )
 		return hBitmap
 	}
-	
+
 	GetBitmap()
 	{
 		if !( clipSize := this._fromclipboard( clipData ) )
@@ -1898,7 +1896,7 @@ class WinClip extends WinClip_base
 			return ""
 		return this._DIBtoHBITMAP( out_data )
 	}
-	
+
 	iGetBitmap()
 	{
 		this._IsInstance( A_ThisFunc )
@@ -1908,7 +1906,7 @@ class WinClip extends WinClip_base
 			return ""
 		return this._DIBtoHBITMAP( out_data )
 	}
-	
+
 	_BITMAPtoDIB( bitmap, ByRef DIB )
 	{
 		if !bitmap
@@ -1937,7 +1935,7 @@ class WinClip extends WinClip_base
 		DllCall( "GetObject", "Ptr", hBitmap, "Uint", size, "ptr", &bm )
 		biBitCount := NumGet( bm, 16, "UShort" )*NumGet( bm, 18, "UShort" )
 		nColors := (1 << biBitCount)
-	if ( nColors > 256 ) 
+	if ( nColors > 256 )
 		nColors := 0
 	bmiLen  := 40 + nColors * 4
 		VarSetCapacity( bmi, bmiLen, 0 )
@@ -1949,14 +1947,14 @@ class WinClip extends WinClip_base
 		NumPut( biBitCount, bmi, 14, "UShort" )
 		NumPut( 0, bmi, 16, "UInt" ) ;compression must be BI_RGB
 
-		; Get BITMAPINFO. 
+		; Get BITMAPINFO.
 		if !DllCall("GetDIBits"
 							,"ptr",hdc
 							,"ptr",hBitmap
-							,"uint",0 
+							,"uint",0
 							,"uint",biHeight
-							,"ptr",0      ;lpvBits 
-							,"ptr",&bmi  ;lpbi 
+							,"ptr",0      ;lpvBits
+							,"ptr",&bmi  ;lpbi
 							,"uint",0)    ;DIB_RGB_COLORS
 			goto, _BITMAPtoDIB_cleanup
 		biSizeImage := NumGet( &bmi, 20, "UInt" )
@@ -1977,10 +1975,10 @@ class WinClip extends WinClip_base
 		if !DllCall("GetDIBits"
 							,"ptr",hdc
 							,"ptr",hBitmap
-							,"uint",0 
+							,"uint",0
 							,"uint",biHeight
-							,"ptr",&DIB + bmiLen     ;lpvBits 
-							,"ptr",&DIB  ;lpbi 
+							,"ptr",&DIB + bmiLen     ;lpvBits
+							,"ptr",&DIB  ;lpbi
 							,"uint",0)    ;DIB_RGB_COLORS
 			goto, _BITMAPtoDIB_cleanup
 _BITMAPtoDIB_cleanup:
@@ -1993,7 +1991,7 @@ _BITMAPtoDIB_cleanup:
 			return 0
 		return DIBLen
 	}
-	
+
 	_setBitmap( ByRef DIB, DIBSize, ByRef clipData, clipSize )
 	{
 		objFormats := this._parseClipboardData( clipData, clipSize )
@@ -2003,7 +2001,7 @@ _BITMAPtoDIB_cleanup:
 		WinClipAPI.memcopy( ObjGetAddress( objFormats[ uFmt ], "buffer" ), &DIB, DIBSize )
 		return this._compileClipData( clipData, objFormats )
 	}
-	
+
 	SetBitmap( bitmap )
 	{
 		if ( DIBSize := this._BITMAPtoDIB( bitmap, DIB ) )
@@ -2014,7 +2012,7 @@ _BITMAPtoDIB_cleanup:
 		}
 		return 0
 	}
-	
+
 	iSetBitmap( bitmap )
 	{
 		this._IsInstance( A_ThisFunc )
@@ -2026,7 +2024,7 @@ _BITMAPtoDIB_cleanup:
 		}
 		return 0
 	}
-	
+
 	GetText()
 	{
 		if !( clipSize := this._fromclipboard( clipData ) )
@@ -2045,7 +2043,7 @@ _BITMAPtoDIB_cleanup:
 			return ""
 		return strget( &out_data, out_size / 2, "UTF-16" )
 	}
-	
+
 	GetHtml()
 	{
 		if !( clipSize := this._fromclipboard( clipData ) )
@@ -2054,7 +2052,7 @@ _BITMAPtoDIB_cleanup:
 			return ""
 		return strget( &out_data, out_size, "CP0" )
 	}
-	
+
 	iGetHtml()
 	{
 		this._IsInstance( A_ThisFunc )
@@ -2064,7 +2062,7 @@ _BITMAPtoDIB_cleanup:
 			return ""
 		return strget( &out_data, out_size, "CP0" )
 	}
-	
+
 	_getFormatName( iformat )
 	{
 		if this.formatByValue.HasKey( iformat )
@@ -2072,32 +2070,32 @@ _BITMAPtoDIB_cleanup:
 		else
 			return WinClipAPI.GetClipboardFormatName( iformat )
 	}
-	
+
 	iGetData( ByRef Data )
 	{
 		this._IsInstance( A_ThisFunc )
 		return this._getClipData( Data )
 	}
-	
+
 	iSetData( ByRef data )
 	{
 		this._IsInstance( A_ThisFunc )
 		return this._setClipData( data, VarSetCapacity( data ) )
 	}
-	
+
 	iGetSize()
 	{
 		this._IsInstance( A_ThisFunc )
 		return ObjGetCapacity( this, "alldata" )
 	}
-	
+
 	HasFormat( fmt )
 	{
 		if !fmt
 			return 0
 		return WinClipAPI.IsClipboardFormatAvailable( WinClipAPI.IsInteger( fmt ) ? fmt : WinClipAPI.RegisterClipboardFormat( fmt )  )
 	}
-	
+
 	iHasFormat( fmt )
 	{
 		this._IsInstance( A_ThisFunc )
@@ -2125,7 +2123,7 @@ _BITMAPtoDIB_cleanup:
 		}
 		return 0
 	}
-	
+
 	iSaveBitmap( filePath, format )
 	{
 		this._IsInstance( A_ThisFunc )
@@ -2144,7 +2142,7 @@ _BITMAPtoDIB_cleanup:
 		WinClipAPI.Gdip_Shutdown( gdip_token )
 		return 1
 	}
-	
+
 	SaveBitmap( filePath, format )
 	{
 		if ( filePath = "" || format = "" )
@@ -2162,7 +2160,7 @@ _BITMAPtoDIB_cleanup:
 		WinClipAPI.Gdip_Shutdown( gdip_token )
 		return 1
 	}
-	
+
 	static ClipboardFormats := { CF_BITMAP : 2 ;A handle to a bitmap (HBITMAP).
 								,CF_DIB : 8  ;A memory object containing a BITMAPINFO structure followed by the bitmap bits.
 								,CF_DIBV5 : 17 ;A memory object containing a BITMAPV5HEADER structure followed by the bitmap color space information and the bitmap bits.
@@ -2189,12 +2187,12 @@ _BITMAPtoDIB_cleanup:
 								,CF_TIFF : 6 ;Tagged-image file format.
 								,CF_UNICODETEXT : 13 ;Unicode text format. Each line ends with a carriage return/linefeed (CR-LF) combination. A null character signals the end of the data.
 								,CF_WAVE : 12 } ;Represents audio data in one of the standard wave formats, such as 11 kHz or 22 kHz PCM.
-	
+
 	static                       WM_COPY := 0x301
 								,WM_CLEAR := 0x0303
 								,WM_CUT := 0x0300
 								,WM_PASTE := 0x0302
-	
+
 	static skipFormats := {      2      : 0 ;"CF_BITMAP"
 								,17     : 0 ;"CF_DIBV5"
 								,0x0082 : 0 ;"CF_DSPBITMAP"
@@ -2205,7 +2203,7 @@ _BITMAPtoDIB_cleanup:
 								,3      : 0 ;"CF_METAFILEPICT"
 								,7      : 0 ;"CF_OEMTEXT"
 								,1      : 0 } ;"CF_TEXT"
-															
+
 	static formatByValue := {    2 : "CF_BITMAP"
 								,8 : "CF_DIB"
 								,17 : "CF_DIBV5"
@@ -2415,7 +2413,6 @@ Returns selected text without disrupting the clipboard. However, if the clipboar
 	return clipNew2?clipNew2:clipNew
 }
 
-
 ;======================================delayedtimer.ahk==================================
 
 class delayedTimer {
@@ -2450,14 +2447,15 @@ class delayedTimer {
 		return this.obj:=[]
 	}
 }
+
 ;======================================ShellRun.ahk ===============================
 
 ;====================================== EXAMPLE ==================================================
 ;ShellRun("Taskmgr.exe")  ;Task manager
 ;ShellRun("Notepad", A_ScriptFullPath)  ;Open a file with notepad
 ;ShellRun("Notepad",,,"RunAs")  ;Open untitled notepad as administrator
-
-/*===================================================================================================
+;================================================================================================
+/*
   ShellRun by Lexikos
 	requires: AutoHotkey_L
 	license: http://creativecommons.org/publicdomain/zero/1.0/
@@ -2518,99 +2516,43 @@ ShellRun(prms*)
 ;       ObjRelease(IApplicationActivationManager)
 ; }
 
-;======================================Toast.ahk==================================
+;======================================ShellRun.ahk ===============================
 
-class Toast{
-	__new(byRef p:=""){
-		static toastCount:=0
-		toastCount++
-		this.id:=toastCount, this.closeObj:=ObjBindMethod(this,"close")
-		,this.def:={ life:500, pos:{x:"center",y:"center"}, bgColor:"0x222222", trans:180, margin:{x:5,y:5}
-					, closekeys:[["~Space","return","~LButton","Esc"]], sound:false, activate:False
-					, title:{ text:"", color: "0xFFFFFF", size:16, opt:"bold", font:"Segoe UI" }
-					, message:{ text:[], color: [], size:[], opt:[], name:[], offset:[20]
-							  , def_color: "0xFFFFFF", def_size:12, def_opt:"", def_name:"Segoe UI", def_offset:20 } }
-		if p
-			for i,x in p {
-				if IsObject(x)
-					for j,y in x
-						this.def[i][j]:= p[i][j]
-				else this.def[i]:=p[i]
-			}
-	}
-	setParam(byRef p,def:=false){
-		if !IsObject(p) ;If not object, assume only title is given
-			p:={title:{text:p}}
-		for i,x in this.def {
-			if IsObject(x) {
-				this[i]:={}
-				for j,y in x
-					this[i][j]:= (p[i][j]="")? this.def[i][j] : p[i][j]
-			} else this[i]:= (p[i]="")? this.def[i] : p[i]
-		}
-		this.x:=this.pos.x, this.y:=this.pos.y, this.pos:="", this.closekeys:=this.closekeys[1]
-		return
-	}
-	show(byRef param){
-		if A_IsPaused
-			return
-		if !this.def
-			this.__new()
-		this.setParam(param)
+;====================================== EXAMPLE ===================================
 
-		GUI_handle:="Toast_GUI" this.id
+; toast("Menu Tip:", "https://google.com", ,2000)
+
+toast(t, msg, s:=14, l:=2000) {
+		c:=0xf5f8fa, o:=Bold, f:=Segoe UI
+		global GUI_handle:= "Toast_GUI" 1224
 		Gui, %GUI_handle%: New, -Caption +ToolWindow +AlwaysOnTop +hwndHWND
-		this.hwnd:=hwnd
-		Gui, %GUI_handle%: Color, % this.bgColor
-		GUI, %GUI_handle%:+LastFoundExist
-		WinSet, Trans, % this.trans
-		Gui, %GUI_handle%:Margin, % this.marginX, % this.marginY
-
-		t:=this.title.text, s:=this.title.size, c:=this.title.color, o:=this.title.opt, f:=this.title.Font
-		Gui, %GUI_handle%: Font, norm s%s% c%c% %o%, %f%
-		Gui, %GUI_handle%: Add, Text,, %t%
-
-		for i,t in this.message.text {
-			 s:= this.message.size  [i] = "" ? this.message.def_size    : this.message.size  [i]
-			,c:= this.message.Color [i] = "" ? this.message.def_color   : this.message.color [i]
-			,o:= this.message.opt   [i] = "" ? this.message.def_opt     : this.message.opt   [i]
-			,f:= this.message.Font  [i] = "" ? this.message.def_font    : this.message.Font  [i]
-			,m:= this.message.offset[i] = "" ? this.message.def_offset  : this.message.offset[i]
-			Gui, %GUI_handle%: Font, norm s%s% c%c% %o%, %f%
-			Gui, %GUI_handle%: Add, Text, xp y+%m%, %t%
+				this.hwnd:=hwnd
+		Gui, %GUI_handle%: Color, 0x222222
+		Gui, %GUI_handle%: +LastFoundExist
+		WinSet, Trans, 200
+		pX := A_CaretX, pY:= A_CaretY
+		if (pX = "" OR py = ""){
+			pX := (A_ScreenWidth-680)
+			pY := (A_ScreenHeight-160)
 		}
-		OnMessage(0x202, closeObj:=this.closeObj)
-		this.exist:=True
-		if this.sound
-			SoundPlay, *-1
-		GUI, %GUI_handle%: Show, % (this.activate?"":"NoActivate ") "autosize x" this.x " y" this.y, % "Toast" this.id
-		if this.life
-			setTimer, % closeObj , % "-" this.life
-		for _,k in this.closekeys
-			Hotkey, % k , % closeObj, On B0 T1
-		return
-	}
-	close(wparam:="",lParam:="",msg:="",hwnd:=""){
-		if (hwnd and hwnd!=this.hwnd)
-			return
-
-		this.exist:=False, GUI_handle:="Toast_GUI" this.id
-		for _,k in this.closekeys
-			Hotkey % k, Off
-		GUI, %GUI_handle%: Destroy
-		return
-	}
+		Gui, %GUI_handle%: Margin, 50, 20 
+		Gui, %GUI_handle%: Font, Bold s%s% c%c% %o%, %f% 
+		Gui, %GUI_handle%: Add, Text, +Center w600, %t% `n %msg%
+		; Gui, %GUI_handle%: Font, norm s%s% c%c% %o%, %f%
+		; Gui, %GUI_handle%: Add, Text, xp y+%m%, %msg%
+		Gui, %GUI_handle%: Show, autosize x%pX% y%pY%, NoActivate
+		setTimer, closeGUI, % "-"l
 }
 
-Toast.show({title:{text:"Script Loaded (v" version ")"},sound:False,life:1000})
+closeGUI:
+		Gui, %GUI_handle%: Destroy
 return
 
-;=================================END OF FUNCTIONS==========================================
+;}================================END OF FUNCTIONS=======================================
 
-;=================================Start Hotkeys=========================================
+;{=================================Start Hotkeys=========================================
 
 ; Triggers for Menu
-
 NumpadEnter::Send {NumpadEnter}
 
 NumpadEnter & NumpadAdd::
@@ -2627,14 +2569,9 @@ if (ErrorLevel){
 Send, {CapsLock Up}
 return
 
-NumLock::
-return
-
 ~>+CapsLock::
-; NumLock::
 ScrollLock::
 ~Insert::
-	Toast.show( {title:{text:strRemove(A_ThisHotkey,["~","+",">"]) (GetKeyState(strRemove(A_ThisHotkey,["~","+",">"]),"T")? " On":" Off")}, sound:False})
 return
 
 ; Restart Script
@@ -2660,6 +2597,9 @@ escKey:
 return
 
 ;;=======================================================================================
-;;==================================================== Copy To ===================================
+
+;;=======================================================================================
+;;================================== Copy To ============================================
+;;=======================================================================================
 return
 ExitApp
