@@ -54,8 +54,8 @@ updateScript() {                     ;Create Directory Structure - Update script
 ; those not needed by ";;;" and those not desired by ";~ "
 ;} ====================================================================================
 
-; directoryMove()
-; updateScript()
+directoryMove()
+updateScript()
 caseMenu.__new()                ;creates the caseMenu
 trayMenu()                      ;creates th etraymenu
 
