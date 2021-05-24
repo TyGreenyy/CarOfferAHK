@@ -2524,17 +2524,17 @@ toast(t, msg, s:=14, l:=2000) {
 		static toastCount:=0
 		toastCount++
 		this.id:=toastCount
-		msglen := Round((StrLen(msg)/60))
+		msglen := Ceil((StrLen(msg)/60))
 		Loop, %msgLen%
 		{
 			chars := ((A_Index*60)-59)
 			splitmsg := SubStr(msg, chars, 60)
 			if (A_Index = 1)
 				splitmsgnew := splitmsg
-			else 
+			else
 				splitmsgnew := splitmsgnew . "`n" splitmsg
 		}
-		msg := splitmsgnew
+		msg := RegExReplace(splitmsgnew, "`am)^[\s\R]*")
 		c:=0xf5f8fa, o:=Bold, f:=Segoe UI
 		global GUI_handle:= "Toast_GUI" this.id
 		Gui, %GUI_handle%: New, -Caption +ToolWindow +AlwaysOnTop +hwndHWND
@@ -2544,8 +2544,8 @@ toast(t, msg, s:=14, l:=2000) {
 		WinSet, Trans, 200
 		pX := A_CaretX, pY:= A_CaretY
 		if (pX = "" OR py = ""){
-			pX := (A_ScreenWidth-680)
-			pY := (A_ScreenHeight-200)
+			pX := "center"
+			pY := "center"
 		}
 		Gui, %GUI_handle%: Margin, 50, 20 
 		Gui, %GUI_handle%: Font, Bold s%s% c%c% %o%, %f% 
@@ -2619,5 +2619,6 @@ return
 ;;=======================================================================================
 ;;================================== Copy To ============================================
 ;;=======================================================================================
+
 return
 ExitApp
