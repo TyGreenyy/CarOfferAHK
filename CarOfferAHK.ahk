@@ -2521,8 +2521,22 @@ ShellRun(prms*)
 ; toast("Menu Tip:", "https://google.com", ,2000)
 
 toast(t, msg, s:=14, l:=2000) {
+		static toastCount:=0
+		toastCount++
+		this.id:=toastCount
+		msglen := Round((StrLen(msg)/60))
+		Loop, %msgLen%
+		{
+			chars := ((A_Index*60)-59)
+			splitmsg := SubStr(msg, chars, 60)
+			if (A_Index = 1)
+				splitmsgnew := splitmsg
+			else 
+				splitmsgnew := splitmsgnew . "`n" splitmsg
+		}
+		msg := splitmsgnew
 		c:=0xf5f8fa, o:=Bold, f:=Segoe UI
-		global GUI_handle:= "Toast_GUI" 1224
+		global GUI_handle:= "Toast_GUI" this.id
 		Gui, %GUI_handle%: New, -Caption +ToolWindow +AlwaysOnTop +hwndHWND
 				this.hwnd:=hwnd
 		Gui, %GUI_handle%: Color, 0x222222
@@ -2531,18 +2545,23 @@ toast(t, msg, s:=14, l:=2000) {
 		pX := A_CaretX, pY:= A_CaretY
 		if (pX = "" OR py = ""){
 			pX := (A_ScreenWidth-680)
-			pY := (A_ScreenHeight-160)
+			pY := (A_ScreenHeight-200)
 		}
 		Gui, %GUI_handle%: Margin, 50, 20 
 		Gui, %GUI_handle%: Font, Bold s%s% c%c% %o%, %f% 
-		Gui, %GUI_handle%: Add, Text, +Center w600, %t% `n %msg%
-		; Gui, %GUI_handle%: Font, norm s%s% c%c% %o%, %f%
-		; Gui, %GUI_handle%: Add, Text, xp y+%m%, %msg%
+		Gui, %GUI_handle%: Add, Text, +Center w600, %t%
+		Gui, %GUI_handle%: Font, norm s%s% c%c% %o%, %f%
+		Gui, %GUI_handle%: Add, Text, +Center w600, %msg%
 		Gui, %GUI_handle%: Show, autosize x%pX% y%pY%, NoActivate
 		setTimer, closeGUI, % "-"l
+		closekeys:=["~Space","return","~LButton","Esc"]
+		for _,k in closekeys
+			Hotkey, % k , closeGUI, On B0 T1
+		return
 }
 
 closeGUI:
+		GUI_handle := "Toast_GUI" this.id
 		Gui, %GUI_handle%: Destroy
 return
 
@@ -2595,6 +2614,7 @@ escKey:
 return
 
 ;;=======================================================================================
+
 
 ;;=======================================================================================
 ;;================================== Copy To ============================================
