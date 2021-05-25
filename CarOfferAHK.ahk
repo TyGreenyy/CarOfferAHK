@@ -38,7 +38,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   whr.WaitForResponse()
   global version := whr.ResponseText
 
-  RegExMatch(trim(version), "[0-9]" , version)                  ;Checks version against Github version
+  RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
   if (version = 9){                                             ;Downloads new .ahk if version does not match
       } else {
          UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
