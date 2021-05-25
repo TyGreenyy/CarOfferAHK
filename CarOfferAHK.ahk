@@ -626,7 +626,7 @@ matrixOverview(){
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
-	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixOverview&p_dealershipID=" . dealershipID . "&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixOverview&p_dealershipID=" . dealershipID . "&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
 	openlink := URI_URLEncode(openLink)
 	toast("Opening Dealer Matrix Overview", openLink, ,2000)
 	ShellRun(openLink)
