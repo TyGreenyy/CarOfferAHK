@@ -30,5 +30,6 @@
 
 --
 
-HubSpot Notification Changes
+HubSpot Notification Changes:
+
 https://sway.office.com/CqtVDRz534xXFDtM?ref=Link
