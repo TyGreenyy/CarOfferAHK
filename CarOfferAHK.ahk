@@ -105,8 +105,9 @@ SetNumLockState, On
 trayMenu(){
 	ifexist %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
 		Menu, Tray, Icon, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll, 2
-}
+	}
 
+	
 Suspend, Off
 
 ;{==================================ToggleKeys=========================================
@@ -160,7 +161,7 @@ class caseMenu {
 		;Seperator Two
 		Menu, caseMenu, Add
 
-		for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
+		for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupCDS","Search Group &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -466,7 +467,7 @@ dealerstats(){
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
-	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerStatsSummary&p_dealershipIDs=%dealershipID%
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerStatsSummary&p_dealershipIDs=" . dealershipID
 	toast("Opening DealerStatsSummary", openLink, ,2000)
 	;~ openlink := URI_URLEncode(openLink)
 	ShellRun(openLink)
@@ -483,7 +484,7 @@ auctionCaps(){
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
-	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.Auction.MMRCapsNew&p_dealershipID=%dealershipID%
+	openlink = "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.Auction.MMRCapsNew&p_dealershipID=" . dealershipID 
 	toast("Opening Dealer Auction Caps", openLink, ,2000)
 	;~ openlink := URI_URLEncode(openLink)
 	ShellRun(openLink)
@@ -511,16 +512,34 @@ dealerExclu(){
 
 dealerCDS(){
 	searchTerm := searchTermClean()
+	GroupID := getDealerID(Trim(searchTerm))
+	dealershipID := GroupID[1]
+	GroupID := GroupID[5]
 	Sleep, 200
-	Clipboard := searchTerm
-	dealershipID := getDealerID(searchTerm)
-	dealershipID := dealershipID[1]
 	if (dealershipID  = "") {
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
-	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&islDealer=%dealershipID%&LinkHref=True=
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&islDealer=" . dealershipID . "&LinkHref=True="
 	openlink := URI_URLEncode(openLink)
+	toast("Opening Dealer CDS Report", openLink, ,2000)
+	ShellRun(openLink)
+	return
+}
+
+groupCDS(){
+	searchTerm := searchTermClean()
+	GroupID := getDealerID(Trim(searchTerm))
+	dealershipID := GroupID[1]
+	GroupID := GroupID[5]
+	Sleep, 200
+	Clipboard := searchTerm
+	if (dealershipID  = "") {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+		return
+	}
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&islDealer=" . GroupID . "&LinkHref=True="
+	openlink := URI_URLEncode(openLink) 
 	toast("Opening Dealer CDS Report", openLink, ,2000)
 	ShellRun(openLink)
 	return
@@ -538,7 +557,7 @@ dealerAccepts(){
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
-	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=%dealershipID%&p_offerAccept=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=" . dealershipID . "&p_offerAccept=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
 	openlink := URI_URLEncode(openLink)
 	toast("Opening Dealer Accepted Offers", openLink, ,2000)
 	ShellRun(openLink)
@@ -555,7 +574,7 @@ dealerOG(){
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
-	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=%dealershipID%&p_offerAccept=&p_og=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=" . dealershipID . "&p_offerAccept=&p_og=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
 	openlink := URI_URLEncode(openLink)
 	toast("Opening Dealer OfferGuards", openLink, ,2000)
 	ShellRun(openLink)
@@ -572,7 +591,7 @@ dealerPuts(){
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
-	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=%dealershipID%&p_offerAccept=&p_putAccept=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=" . dealershipID  "&p_offerAccept=&p_putAccept=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
 	openlink := URI_URLEncode(openLink)
 	toast("Opening Dealer Put Bids", openLink, ,2000)
 	ShellRun(openLink)
@@ -590,7 +609,7 @@ VINAnalysis(){
 		toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
 		return
 	}
-	openLink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixAnalysis&p_action=R&p_requestID=&VIN=%searchTerm%&rdDisableRememberExpansion_menuTreeSide=True&p_vin=%searchTerm%&rdShowElementHistory=
+	openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixAnalysis&p_action=R&p_requestID=&VIN=" . searchTerm . "&rdDisableRememberExpansion_menuTreeSide=True&p_vin=" . searchTerm . "&rdShowElementHistory="
 	toast("Searching VIN Analysis", openLink, ,2000)
 	shellrun(openLink)
 	Clipboard := searchTerm
@@ -607,7 +626,7 @@ matrixOverview(){
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
-	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixOverview&p_dealershipID=%dealershipID%&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixOverview&p_dealershipID=" . dealershipID . "&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form
 	openlink := URI_URLEncode(openLink)
 	toast("Opening Dealer Matrix Overview", openLink, ,2000)
 	ShellRun(openLink)
@@ -616,7 +635,7 @@ matrixOverview(){
 
 jiraFunc(){
 	searchTerm := searchTermClean()
-	openLink = https://caroffer.atlassian.net/secure/QuickSearch.jspa?searchString=%searchTerm%
+	openLink := "https://caroffer.atlassian.net/secure/QuickSearch.jspa?searchString=" . searchTerm
 	shellrun(openLink)
 	toast("Searching JIRA", openLink, ,2000)
 	clipboardLink = %searchTerm%
@@ -700,7 +719,7 @@ yearmakemodelformat2(){
 		toast("Tip:", "`nHighlight Right to Left`nfrom Sell Today to the Year Make Model ", ,5000)
 	}
 	Clipboard := searchTermFinal
-	toast("Success! Copied to Clipboard:", searchTermFinal, ,3000)
+	toast("Success! Copied to Clipboard:", searchTermFinal, ,3000, true)
 	return
 }
 
@@ -722,7 +741,7 @@ vehicleinfopaste(){
 
 handsellCopy(){
 	Send, ^c
-	Sleep, 50
+	Sleep, 200
 	test := Clipboard
 	Vehicle := StrSplit(test, "`n")
 	Vehicle := Vehicle[1]
@@ -746,7 +765,7 @@ handsellCopy(){
 	regex := RegExMatch(html, regexformula, hreflink)
 	hreflink := StrSplit(hreflink, "=""")
 	texttopaste := Vehicle " - " VIN " - " Miles " - " Price "`n" hreflink[2]
-	toast("Success! Copied to Clipboard:", texttopaste, ,3000)
+	toast("Success! Copied to Clipboard:", texttopaste, 12 ,3000, true)
 	Clipboard := texttopaste
 	return
 }
@@ -2520,19 +2539,23 @@ ShellRun(prms*)
 
 ; toast("Menu Tip:", "https://google.com", ,2000)
 
-toast(t, msg, s:=14, l:=2000) {
+toast(t, msg, s:=14, l:=2000, n:="") {
 		static toastCount:=0
 		toastCount++
 		this.id:=toastCount
-		msglen := Ceil((StrLen(msg)/60))
-		Loop, %msgLen%
-		{
-			chars := ((A_Index*60)-59)
-			splitmsg := SubStr(msg, chars, 60)
-			if (A_Index = 1)
-				splitmsgnew := splitmsg
-			else
-				splitmsgnew := splitmsgnew . "`n" splitmsg
+		msglen := Ceil((StrLen(msg)/80))
+	 	if (n = ""){
+			Loop, %msgLen%
+				{
+					chars := ((A_Index*80)-79)
+					splitmsg := SubStr(msg, chars, 80)
+					if (A_Index = 1)
+						splitmsgnew := splitmsg
+					else
+						splitmsgnew := splitmsgnew . "`n" splitmsg
+				}
+			} else {
+				splitmsgnew := msg
 		}
 		msg := RegExReplace(splitmsgnew, "`am)^[\s\R]*")
 		c:=0xf5f8fa, o:=Bold, f:=Segoe UI
@@ -2547,7 +2570,7 @@ toast(t, msg, s:=14, l:=2000) {
 			pX := "center"
 			pY := "center"
 		}
-		Gui, %GUI_handle%: Margin, 50, 20 
+		Gui, %GUI_handle%: Margin, 10,10 
 		Gui, %GUI_handle%: Font, Bold s%s% c%c% %o%, %f% 
 		Gui, %GUI_handle%: Add, Text, +Center w600, %t%
 		Gui, %GUI_handle%: Font, norm s%s% c%c% %o%, %f%
