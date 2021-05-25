@@ -538,7 +538,7 @@ groupCDS(){
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
-	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&islDealer=" . GroupID . "&LinkHref=True="
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&p_groupid=" . GroupID . "&LinkHref=True="
 	openlink := URI_URLEncode(openLink) 
 	toast("Opening Dealer CDS Report", openLink, ,2000)
 	ShellRun(openLink)
