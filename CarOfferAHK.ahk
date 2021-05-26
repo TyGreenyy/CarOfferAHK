@@ -10,7 +10,7 @@ Suspend, On                     ;Suspend Script for Update
 
 directoryMove(){
     if !(A_ScriptDir = A_MyDocuments){
-        FileCopy, %A_ScriptDir%\CarOfferAHK.ah k, %A_MyDocuments%\CarOfferAHK.ahk
+        FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
         Sleep, 3000
         Run, %A_MyDocuments%\CarOfferAHK.ahk  /restart
         Sleep, 200
