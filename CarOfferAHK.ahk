@@ -164,7 +164,7 @@ class caseMenu {
 		;Seperator One
 		Menu, caseMenu, Add
 
-		for _, j in [["VINAnalysis","Search &VIN","2"],["carfaxSearch","Search CarFax","26"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["handsellCopy","Copy Handsell Unit","16"],["vehicleinfopaste","&Year Make Model - VIN","17"],["yearmakemodelformat2","Year Make Model - V&IN - $","17"]]
+		for _, j in [["VINAnalysis","Search &VIN","2"],["carfaxSearch","Search CarFax","26"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["searchCompanyContacts","Search Dealer Contacts","5"],["handsellCopy","Copy Handsell Unit","16"],["vehicleinfopaste","&Year Make Model - VIN","17"],["yearmakemodelformat2","Year Make Model - V&IN - $","17"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -403,10 +403,12 @@ searchTermClean(){
 searchHubspot(){
 	searchTerm := searchTermClean()
 	hubspotID := getDealerID(Trim(searchTerm))
+	companyName := hubspotID[2]
 	hubspotID := hubspotID[3]
 	if !(hubspotID = "") {
 		openLink := "https://app.hubspot.com/contacts/5712725/company/" . hubspotID
-		toast("Opening Dealer Record in Hubspot", openLink, ,2000)
+		noti := "Opening " . companyName . " in Hubspot"
+		toast(noti, openLink, ,3000)
 	} else {
 		openLink := "https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=" . searchTerm
 			toast("Opening Hubspot and Searching:", searchTerm, ,2000)
