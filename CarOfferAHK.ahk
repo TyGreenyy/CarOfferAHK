@@ -414,6 +414,22 @@ searchHubspot(){
 	Shellrun(openLink)
 }
 
+searchCompanyContacts(){
+	searchTerm := searchTermClean()
+	hubspotID := getDealerID(Trim(searchTerm))
+	companyName := hubspotID[2]
+	hubspotID := hubspotID[3]
+	if !(hubspotID = "") {
+		openLink := "https://app.hubspot.com/contacts/5712725/contacts/list/view/all/?associatedcompanyid=" . hubspotID
+		noti := "Opening " . companyName . " Contacts in Hubspot"
+		toast(noti, openLink, ,3000)
+	} else {
+		openLink := "https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=" . searchTerm
+			toast("Opening Hubspot and Searching:", searchTerm, ,2000)
+	}
+	Shellrun(openLink)
+}
+
 groupWholeSale(){
 	searchTerm := searchTermClean()
 	GroupID := getDealerID(Trim(searchTerm))
