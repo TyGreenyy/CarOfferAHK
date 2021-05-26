@@ -164,7 +164,7 @@ class caseMenu {
 		;Seperator One
 		Menu, caseMenu, Add
 
-		for _, j in [["VINAnalysis","Search &VIN","2"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["handsellCopy","Copy Handsell Unit","16"],["vehicleinfopaste","&Year Make Model - VIN","17"],["yearmakemodelformat2","Year Make Model - V&IN - $","17"]]
+		for _, j in [["VINAnalysis","Search &VIN","2"],["carfaxSearch","Search CarFax","26"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["handsellCopy","Copy Handsell Unit","16"],["vehicleinfopaste","&Year Make Model - VIN","17"],["yearmakemodelformat2","Year Make Model - V&IN - $","17"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -625,6 +625,26 @@ VINAnalysis(){
 	}
 	openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixAnalysis&p_action=R&p_requestID=&VIN=" . searchTerm . "&rdDisableRememberExpansion_menuTreeSide=True&p_vin=" . searchTerm . "&rdShowElementHistory="
 	toast("Searching VIN Analysis", openLink, ,2000)
+	shellrun(openLink)
+	Clipboard := searchTerm
+	return
+}
+
+;https://www.carfaxonline.com/vhrs/3N1CP5CU8KL559485
+
+carfaxSearch(){
+	searchTerm := Trim(searchTermClean())
+	if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
+		toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+		return
+	}
+	if !(StrLen(searchTerm) = 17){
+		; Check VIN
+		toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+		return
+	}
+	openLink := "https://www.carfaxonline.com/vhrs/" . searchTerm
+	toast("Searching CarFax", openLink, ,2000)
 	shellrun(openLink)
 	Clipboard := searchTerm
 	return
@@ -2561,7 +2581,7 @@ toast(t, msg, s:=14, l:=2000, n:="") {
 		toastCount++
 		this.id:=toastCount
 		msglen := Ceil((StrLen(msg)/80))
-		if (n = ""){
+	 	if (n = ""){
 			Loop, %msgLen%
 				{
 					chars := ((A_Index*80)-79)
@@ -2596,7 +2616,7 @@ toast(t, msg, s:=14, l:=2000, n:="") {
 		setTimer, closeGUI, % "-"l
 		; closekeys:=["~Space","~LButton","~Esc"]
 		; for _,k in closekeys
-		;   Hotkey, % k , closeGUI, On B0 T1
+		; 	Hotkey, % k , closeGUI, On B0 T1
 		; return
 }
 
