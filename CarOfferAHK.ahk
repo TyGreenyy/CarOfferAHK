@@ -9,27 +9,31 @@ reloadAsAdmin_Task()         ;Runs reloadAsAdmin task
 Suspend, On                     ;Suspend Script for Update
 
 directoryMove(){
-    if !(A_ScriptDir = A_MyDocuments){
-        FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
-        Sleep, 3000
-        Run, %A_MyDocuments%\CarOfferAHK.ahk  /restart
-        Sleep, 200
-        ExitApp
-    } else {
-        FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
-        }
-    return
-}
+	if !(A_ScriptDir = A_MyDocuments){
+		FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
+		Sleep, 3000
+		try {
+		Run, %A_MyDocuments%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk /restart /f
+			} catch { 
+				Sleep, 3000
+				ExitApp
+			}
+
+		} else {
+
+	}
+	}
 
 updateScript() {                     ;Create Directory Structure - Update script from Github
 
   if !FileExist("%A_MyDocuments%\CarOfferAHK\")
-      FileCreateDir, %A_MyDocuments%\CarOfferAHK\              ;Create Directory Structure 
-      FileCreateDir, %A_MyDocuments%\CarOfferAHK\resources\             ;Create Directory Structure
+	  FileCreateDir, %A_MyDocuments%\CarOfferAHK\              ;Create Directory Structure 
+	  FileCreateDir, %A_MyDocuments%\CarOfferAHK\resources\             ;Create Directory Structure
 
  UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/DealerCodes.ini, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
   UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/CarOfferAHK_Rounded.ico, %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
   UrlDownloadToFile, https://github.com/TyGreenyy/CarOfferAHK/raw/main/resources/imageres.dll, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll
+
 
   whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")               ;Create HTTP request to check version
   whr.Open("GET", "https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/version.md", true)
@@ -40,9 +44,9 @@ updateScript() {                     ;Create Directory Structure - Update script
 
   RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
   if (version = 101){                                             ;Downloads new .ahk if version does not match
-      } else {
-         UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
-        }
+	  } else {
+		 UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
+		}
 }
 
 ;{ ============================== Copy From ===============================================
@@ -109,6 +113,16 @@ trayMenu(){
 
 	
 Suspend, Off
+
+if !(A_ScriptDir = A_MyDocuments){
+	try {
+		FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
+		ExitApp
+	} catch {
+		msgbox, catch
+	}
+	ExitApp
+}
 
 ;{==================================ToggleKeys=========================================
 ;} ====================================================================================
@@ -2331,6 +2345,8 @@ reloadAsAdmin_Task(force:=True) { ;  By SKAN,  http://goo.gl/yG6A1F,  CD:19/Aug/
   }
 
   else if !TaskExists {
+
+  	if (A_ScriptDir = A_MyDocuments){
 	XML := "
 	(LTrim Join
 	  <?xml version=""1.0"" ?><Task xmlns=""http://schemas.microsoft.com/windows/2004/02/mit/task""><Regi
@@ -2353,6 +2369,7 @@ reloadAsAdmin_Task(force:=True) { ;  By SKAN,  http://goo.gl/yG6A1F,  CD:19/Aug/
 	TaskRoot.RegisterTask( TaskName, XML, TASK_CREATE, "", "", TASK_LOGON_INTERACTIVE_TOKEN )
 
   }
+}
 
   return TaskName
 }
@@ -2544,7 +2561,7 @@ toast(t, msg, s:=14, l:=2000, n:="") {
 		toastCount++
 		this.id:=toastCount
 		msglen := Ceil((StrLen(msg)/80))
-	 	if (n = ""){
+		if (n = ""){
 			Loop, %msgLen%
 				{
 					chars := ((A_Index*80)-79)
@@ -2579,7 +2596,7 @@ toast(t, msg, s:=14, l:=2000, n:="") {
 		setTimer, closeGUI, % "-"l
 		; closekeys:=["~Space","~LButton","~Esc"]
 		; for _,k in closekeys
-		; 	Hotkey, % k , closeGUI, On B0 T1
+		;   Hotkey, % k , closeGUI, On B0 T1
 		; return
 }
 
