@@ -145,7 +145,7 @@ Return
 class caseMenu {
 	__new(){
 
-		for _, j in [["truePeopleSearch","Search &True People","14"],["phoneFormatPara","Format P&hone: (###) ###-####","12"]]
+		for _, j in [["phoneFormatPara","Format P&hone: (###) ###-####","12"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
