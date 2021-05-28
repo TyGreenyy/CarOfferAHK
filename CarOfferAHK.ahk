@@ -164,7 +164,7 @@ class caseMenu {
 		;Seperator One
 		Menu, caseMenu, Add
 
-		for _, j in [["VINAnalysis","Search &VIN","2"],["carfaxSearch","Search CarFax","26"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["searchCompanyContacts","Search Dealer Contacts","5"],["handsellCopy","Copy Handsell Unit","16"],["vehicleinfopaste","&Year Make Model - VIN","17"],["yearmakemodelformat2","Year Make Model - V&IN - $","17"]]
+		for _, j in [["VINAnalysis","Search &VIN","2"],["carfaxSearch","Search CarFax","26"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["searchCompanyContacts","Search Dealer Contacts","5"],["handsellCopy","Copy Handsell Units","16"],["vehicleinfopaste","Copy Multiple Units - Portal","17"],["yearmakemodelformat2","Copy Multiple Offers - Portal","17"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -175,7 +175,7 @@ class caseMenu {
 		;Seperator Two
 		Menu, caseMenu, Add
 
-		for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupCDS","Search Group &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
+		for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupCDS","Search Group &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["dealerBuys","Search Dealer Buys","2"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -596,6 +596,27 @@ dealerAccepts(){
 	return
 }
 
+dealerBuys(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	Clipboard := searchTerm
+	dealershipID := getDealerID(searchTerm)
+	companyName := dealershipID[2]
+	GroupID := dealershipID[5]
+	dealershipID := dealershipID[1]
+	if !(GroupID = "") {
+		openLink := "https://caroffer-reports.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.IncomingDetails&p_detailRange=MTD&p_buyingDealershipID=" . GroupID . "&p_ReportLevel=DETAIL&rdAgReset=True"
+			toast("Opening Dealer Group Wholesale", openLink, ,5000)
+			Shellrun(openLink)
+	} else if !(dealershipID = "") {
+		openLink := "https://caroffer-reports.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.IncomingDetails&p_detailRange=MTD&p_buyingDealershipID=" . dealershipID . "&p_ReportLevel=DETAIL&rdAgReset=True"
+			toast("Opening Dealer Wholesale", openLink, ,2000)
+			Shellrun(openLink)
+	} else {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+	}
+}
+
 dealerOG(){
 	searchTerm := searchTermClean()
 	Sleep, 200
@@ -906,6 +927,16 @@ cleanRename(){
 	Clip(oldClip, true)
 		return
 }
+
+;=========================================JEEE========================================
+;functions for Desktop and Explorer folder windows:
+;JEE_ExpWinGetSel ;get selected files (list)
+;JEE_ExpWinGetDir ;get Explorer window folder
+;JEE_ExpWinSetDir ;set Explorer window folder (navigate) (or open file/url in new window)
+;=====================================================================================
+;=====================================================================================
+
+
 
 ;=========================================JEEE========================================
 ;functions for Desktop and Explorer folder windows:
@@ -2339,7 +2370,6 @@ URI_URLDecode(URL){
 
 ;Msgbox % URI_Encode("hi hello")
 ;Msgbox % URI_Decode("hi%20hello")
-
 ;~ ^j::
 ;~ ;Msgbox % URI_Encode("hi hello")
 ;~ Msgbox % URI_Encode("On British TV's ""Top of the Pops" "this Booker T. & the MGs hit might be titled ""Spring Onions")
@@ -2656,13 +2686,18 @@ NumpadEnter & NumpadAdd::
 return
 
 *CapsLock::
+state := GetKeyState("CapsLock", "T")
+toast(state, state, , 2000, 1)
 keywait, Capslock, T0.2
 if (ErrorLevel){
 	^CapsLock::
 	caseMenu.show()
+	; state := GetKeyState("CapsLock", "T")
+	; toast(state, state, , 2000)
 	return
 	}
 Send, {CapsLock Up}
+
 return
 
 ~>+CapsLock::
@@ -2698,7 +2733,5 @@ return
 ;;=======================================================================================
 ;;================================== Copy To ============================================
 ;;=======================================================================================
-
-
 return
 ExitApp
