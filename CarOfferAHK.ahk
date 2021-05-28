@@ -776,18 +776,19 @@ yearmakemodelformat2(){
 }
 
 vehicleinfopaste(){
-	searchTerm := Clip()
-	Loop, parse, searchTerm, `n, `r
+	linestoParse := WinClip.gettext(Clip())
+	StringSplit, linestoParse, linestoParse, `n,
+	Loop, %linestoParse0%
 	{
-	  if A_Index = 1
-	  {
-		Clipboard_One := A_LoopField
-	  }
-		Clipboard_Last := A_LoopField
+		A_lineMinus := (A_Index - 1)
+		A_LinePlus := (A_Index + 1)
+		if (RegExMatch(linestoParse%A_Index%, "([A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{8})", VinNumbervar))
+			makemodel := StrReplace(linestoParse%A_lineMinus% . " - " . VinNumbervar, "`r", "")
+		if (RegExMatch(linestoParse%A_Index%, "\$.*", pricevar))
+			finalText := finalText "`n" makemodel . " - " . pricevar
 	}
-	Clipboard_One := caseChange(Clipboard_One, "T")
-	searchTerm := Clipboard_One " - " Clipboard_Last
-	Clipboard := searchTerm
+	Clipboard := finalText
+	toast("Success! Copied to Clipboard:", finalText, ,3000, true)
 		return
 }
 
