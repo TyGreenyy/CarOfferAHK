@@ -2687,7 +2687,6 @@ return
 
 *CapsLock::
 state := GetKeyState("CapsLock", "T")
-toast(state, state, , 2000, 1)
 keywait, Capslock, T0.2
 if (ErrorLevel){
 	^CapsLock::
