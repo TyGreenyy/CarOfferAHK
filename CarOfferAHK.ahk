@@ -276,7 +276,7 @@ class caseMenu {
 		}
 
 DateAction(type) {
-		FormatTime, OutputVar, %A_Now%, MMM dd, yyyy 'at' h:mm ss tt CST
+		FormatTime, OutputVar, %A_Now%, MMM dd, yyyy 'at' h:mm tt CST
 		SendInput %OutputVar%
 	Return
 }
