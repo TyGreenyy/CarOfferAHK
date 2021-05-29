@@ -43,7 +43,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   global version := whr.ResponseText
 
   RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
-  if (version = 115){                                             ;Downloads new .ahk if version does not match
+  if (version = 121){                                             ;Downloads new .ahk if version does not match
 	  } else {
 		 UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
 		}
@@ -83,7 +83,7 @@ global SCR_Path = A_ScriptDir   ;Sets path for tray menu options
 #Hotstring * ? B C K0 Z         ;Hotstring global settings
 #InstallKeybdHook               ;Installs Keyboard hook
 #InstallMouseHook               ;Installs Mouse hook
-#KeyHistory 250                 ;maximum number of keyboard and mouse events displayed
+#KeyHistory 50                  ;maximum number of keyboard and mouse events displayed
 #MaxHotkeysPerInterval 200      ;Rate a warning dialog will be displayed
 #MaxMem 256                     ;Allows variables with heavy memory usage.
 #MaxThreads 255                 ;Allows # of pseudo-threads to run simultaneously.
@@ -111,17 +111,16 @@ trayMenu(){
 		Menu, Tray, Icon, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll, 2
 	}
 
-	
 Suspend, Off
 
 if !(A_ScriptDir = A_MyDocuments){
-	try {
-		FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
-		ExitApp
-	} catch {
-		msgbox, catch
-	}
-	ExitApp
+	; try {
+	;  FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
+	;  ExitApp
+	; } catch {
+	;  msgbox, catch
+	; }
+	; ExitApp
 }
 
 ;{==================================ToggleKeys=========================================
@@ -136,11 +135,6 @@ if !(A_ScriptDir = A_MyDocuments){
 ;  return False
 ;}
 
-return
-DateAction:
-	DatePaste := StrReplace(A_ThisMenuItem, "Paste: ", "")
-	SendInput %DatePaste%{Raw}%A_EndChar%
-Return
 
 class caseMenu {
 	__new(){
@@ -153,18 +147,10 @@ class caseMenu {
 			Menu, caseMenu, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
 		}
 
-		FormatTime, OutputVar, %A_Now%, MMM dd, yyyy 'at' h:mm tt CST
-		for _, j in [[OutputVar]]
-
-		{
-			Menu, caseMenu, add, Paste: %OutputVar%, DateAction
-			Menu, caseMenu, Icon, Paste: %OutputVar%, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , 5
-		}
-
 		;Seperator One
 		Menu, caseMenu, Add
 
-		for _, j in [["VINAnalysis","Search &VIN","2"],["carfaxSearch","Search CarFax","26"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["searchCompanyContacts","Search Dealer Contacts","5"],["handsellCopy","Copy Handsell Units","16"],["vehicleinfopaste","Copy Multiple Units - Portal","17"],["yearmakemodelformat2","Copy Multiple Offers - Portal","17"]]
+		for _, j in [["VINAnalysis","Search &VIN","2"],["carfaxSearch","Search CarFax","26"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["searchCompanyContacts","Search Dealer Contacts","5"],["handsellCopy","Copy Multiple Handsell Units","16"],["vehicleinfopaste","Copy Multiple Units - Portal","17"],["yearmakemodelformat2","Copy Multiple Offers - Portal","17"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -172,7 +158,7 @@ class caseMenu {
 			Menu, caseMenu, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
 		}
 
-		;Seperator Two
+		;Seperator One
 		Menu, caseMenu, Add
 
 		for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupCDS","Search Group &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
@@ -183,8 +169,9 @@ class caseMenu {
 			Menu, caseMenu, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
 		}
 
-		;Seperator Four
+		;Seperator Two
 		Menu, caseMenu, Add
+
 
 		for _, j in [["phoneFormat","###-###-####"],["phoneFormatPara","(###) ###-####"],["googlefileDownload","Google Drive DL Link"],["fileRename","File &Rename"],["cleanRename","Clean Rename"],["urlencode","URL Encode"]]
 
@@ -223,10 +210,10 @@ class caseMenu {
 
 		for _, j in [["addQuotes","Add Quotes"],["addPercent","Variables"],["removeformat","Remove Format"]]
 
-	{
+		{
 		act:=ObjBindMethod(this,"textFormat",j[1])
 		Menu, Submenu1, Add, % j[2], % act
-	}
+		}
 
 			/*
 			for _, i in ["&Capslock","&Numlock","Sc&rollLock","I&nsert"] {
@@ -234,20 +221,20 @@ class caseMenu {
 			Menu, caseMenu, Add, % i, % act
 			}
 			*/
-	return
+		return
 	}
 
 	show() {
-/*        for _, i in ["&Numlock","Sc&rollLock","I&nsert"]
-		;~ sleep, 500*
-		for _, i in ["&Numlock","Sc&rollLock","I&nsert"]
-			Menu, caseMenu, % GetKeyState(strReplace(i,"&"),"T")?"Check":"Uncheck", % i
-*/
-		Menu, caseMenu, Show, % A_CaretX, % (A_Carety+25)
-		return
-		}
+ ;        for _, i in ["&Numlock","Sc&rollLock","I&nsert"]
+	; 	;~ sleep, 500*
+	; 	for _, i in ["&Numlock","Sc&rollLock","I&nsert"]
+	; 		Menu, caseMenu, % GetKeyState(strReplace(i,"&"),"T")?"Check":"Uncheck", % i
 
-		caseChange(type){ ; type: U=UPPER, L=Lower, T=Title, S=Sentence, I=Invert
+			Menu, caseMenu, Show, % A_CaretX, % (A_Carety+25)
+		return
+	}
+
+	caseChange(type){ ; type: U=UPPER, L=Lower, T=Title, S=Sentence, I=Invert
 			text:=caseChange(getSelectedText(), type)
 				oldClip:=ClipboardAll
 				clipboard:=text
@@ -255,7 +242,7 @@ class caseMenu {
 				sleep 100
 				Clipboard:=oldClip
 			return
-			}
+		}
 
 		toggle(key){
 			if (key=Insert)
@@ -282,7 +269,8 @@ DateAction(type) {
 }
 
 Togglekeys_check(){
-	return {c:getkeyState("Capslock","T"), n:getkeyState("Numlock","T"), s:getkeyState("ScrollLock","T"), i:getkeyState("Insert","T")}
+	return {c:getkeyState("Capslock","T")}
+
 }
 
 strRemove(parent,strlist) {
@@ -292,14 +280,13 @@ strRemove(parent,strlist) {
 }
 
 caseChange(text,type){ ; type: U=UPPER, L=Lower, T=Title, S=Sentence, I=Invert
-	static X:= ["iOS","iPhone","iPad","I","AHK","AutoHotkey","Dr","Mr","Ms","Mrs","BK","DEA","AKJ","via","v","vs","GPG","PGP","to","of","and","on","with","USB" ]
+	static X:= ["iOS","iPhone","iPad","I","AHK","AutoHotkey","Dr","Mr","Ms","Mrs","BK","DEA","AKJ","via","v","vs","GPG","PGP","to","of","and","on","with","USB","VIN" ]
 	;~ list of words that should not be modified for S,T
 	if (type="S") { ;Sentence case.
 		text := RegExReplace(RegExReplace(text, "(.*)", "$L{1}"), "(?<=[^a-zA-Z0-9_-]\s|\n).|^.", "$U{0}")
 	} else if (type="I") ;iNVERSE
 		text:=RegExReplace(text, "([A-Z])|([a-z])", "$L1$U2")
 	else text:=RegExReplace(text, "(.*)", "$" type "{1}")
-
 	if (type="S" OR type="T")
 		for _, word in X ;Parse the exceptions
 			text:= RegExReplace(text,"i)\b" word "\b", word)
@@ -309,7 +296,7 @@ caseChange(text,type){ ; type: U=UPPER, L=Lower, T=Title, S=Sentence, I=Invert
 TGL_ExpWinGetSel(){
 	WinGet, hwndtmp, ID, A
 	WinActivate, %hwndtmp%,
-	Clipboard := JEE_ExpWinGetSel(hwndtmp)
+	Clipboard := JEE_ExpWinGetSel(hwndtmp)D
 }
 
 TGL_ExpWinGetSel_Private(){
@@ -401,84 +388,15 @@ searchTermClean(){
 	return searchTerm
 }
 
-searchHubspot(){
-	searchTerm := searchTermClean()
-	hubspotID := getDealerID(Trim(searchTerm))
-	companyName := hubspotID[2]
-	hubspotID := hubspotID[3]
-	if !(hubspotID = "") {
-		openLink := "https://app.hubspot.com/contacts/5712725/company/" . hubspotID
-		noti := "Opening " . companyName . " in Hubspot"
-		toast(noti, openLink, ,3000)
-	} else {
-		openLink := "https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=" . searchTerm
-			toast("Opening Hubspot and Searching:", searchTerm, ,2000)
-	}
-	Shellrun(openLink)
-}
-
-searchCompanyContacts(){
-	searchTerm := searchTermClean()
-	hubspotID := getDealerID(Trim(searchTerm))
-	companyName := hubspotID[2]
-	hubspotID := hubspotID[3]
-	if !(hubspotID = "") {
-		openLink := "https://app.hubspot.com/contacts/5712725/contacts/list/view/all/?associatedcompanyid=" . hubspotID
-		noti := "Opening " . companyName . " Contacts in Hubspot"
-		toast(noti, openLink, ,3000)
-	} else {
-		openLink := "https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=" . searchTerm
-			toast("Opening Hubspot and Searching:", searchTerm, ,2000)
-	}
-	Shellrun(openLink)
-}
-
-groupWholeSale(){
-	searchTerm := searchTermClean()
-	GroupID := getDealerID(Trim(searchTerm))
-	dealershipID := GroupID[1]
-	GroupID := GroupID[5]
-	if !(GroupID = "") {
-		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerInventoryOffers&p_groupid="  . GroupID . "&p_reportType=&p_wholesale=W&LinkHref=True"
-			toast("Opening Dealer Group Wholesale", openLink, ,5000)
-			Shellrun(openLink)
-	} else if !(dealershipID = "") {
-		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerInventoryOffers&p_dealershipid="  . dealershipID . "&p_reportType=&p_wholesale=W&LinkHref=True"
-			toast("Opening Dealer Wholesale", openLink, ,2000)
-			Shellrun(openLink)
-	} else {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-
-	}
-
-}
-
-searchVXDealer(){
-	searchTerm := searchTermClean()
-	searchTerm := StrReplace(searchTerm, " ", "%20")
-	if (searchTerm = "") {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-	}
-	openlink := "https://admin.pearlsolutions.com/Home/Portal#/dealerships?search=" . searchTerm
-	toast("Opening Dealer Search in VX Admin", openLink, ,2000)
-	ShellRun(openlink)
-}
-
 getDealerID(searchTerm){
-   FileRead, FileText, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
-		Data := {}
-		SearchLine := "i)" . searchTerm
-		Loop, Parse, FileText, `n , `r
-		{
-		if (RegExMatch(A_Loopfield, SearchLine)){
-			linetext := StrSplit(A_Loopfield, "&&", "&&")
-				return linetext
-			}
-		}
- }
+	SearchLine := "i)" . searchTerm
+	Loop, read, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
+		if (test := RegExMatch(A_LoopReadLine, SearchLine, searchTerm))
+	return A_LoopReadLine
+}
 
 getGroupID(searchTerm){
-   FileRead, FileText, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
+	FileRead, FileText, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
 	Data := {}
 		SearchLine := "i)" . searchTerm
 		Loop, Parse, FileText, `n , `r
@@ -489,168 +407,6 @@ getGroupID(searchTerm){
 			}
 		}
  }
-
-dealerstats(){
-	searchTerm := searchTermClean()
-	Sleep, 200
-	Clipboard := searchTerm
-	dealershipID := getDealerID(searchTerm)
-	dealershipID := dealershipID[1]
-	if (dealershipID  = "") {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-		return
-	}
-	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerStatsSummary&p_dealershipIDs=" . dealershipID
-	toast("Opening DealerStatsSummary", openLink, ,2000)
-	;~ openlink := URI_URLEncode(openLink)
-	ShellRun(openLink)
-	return
-}
-
-auctionCaps(){
-	searchTerm := searchTermClean()
-	Sleep, 200
-	Clipboard := searchTerm
-	dealershipID := getDealerID(searchTerm)
-	dealershipID := dealershipID[1]
-	if (dealershipID  = "") {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-		return
-	}
-	openlink = "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.Auction.MMRCapsNew&p_dealershipID=" . dealershipID 
-	toast("Opening Dealer Auction Caps", openLink, ,2000)
-	;~ openlink := URI_URLEncode(openLink)
-	ShellRun(openLink)
-	return
-}
-
-;~ http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerExclusions&rdAjaxCommand=RefreshElement&pDealershipID=
-
-dealerExclu(){
-	searchTerm := searchTermClean()
-	Sleep, 200
-	Clipboard := searchTerm
-	dealershipID := getDealerID(searchTerm)
-	dealershipID := dealershipID[1]
-	if (dealershipID  = "") {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-		return
-	}
-	openlink = http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerExclusions&pDealershipID=%dealershipID%
-	toast("Opening Dealer Exclusions", openLink, ,2000)
-	;~ openlink := URI_URLEncode(openLink)
-	ShellRun(openLink)
-	return
-}
-
-dealerCDS(){
-	searchTerm := searchTermClean()
-	GroupID := getDealerID(Trim(searchTerm))
-	dealershipID := GroupID[1]
-	GroupID := GroupID[5]
-	Sleep, 200
-	if (dealershipID  = "") {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-		return
-	}
-	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&islDealer=" . dealershipID . "&LinkHref=True="
-	openlink := URI_URLEncode(openLink)
-	toast("Opening Dealer CDS Report", openLink, ,2000)
-	ShellRun(openLink)
-	return
-}
-
-groupCDS(){
-	searchTerm := searchTermClean()
-	GroupID := getDealerID(Trim(searchTerm))
-	dealershipID := GroupID[1]
-	GroupID := GroupID[5]
-	Sleep, 200
-	Clipboard := searchTerm
-	if (dealershipID  = "") {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-		return
-	}
-	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&p_groupid=" . GroupID . "&LinkHref=True="
-	openlink := URI_URLEncode(openLink) 
-	toast("Opening Dealer CDS Report", openLink, ,2000)
-	ShellRun(openLink)
-	return
-}
-
-;=http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&islDealer=9614&LinkHref=True
-
-dealerAccepts(){
-	searchTerm := searchTermClean()
-	Sleep, 200
-	Clipboard := searchTerm
-	dealershipID := getDealerID(searchTerm)
-	dealershipID := dealershipID[1]
-	if (dealershipID  = "") {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-		return
-	}
-	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=" . dealershipID . "&p_offerAccept=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
-	openlink := URI_URLEncode(openLink)
-	toast("Opening Dealer Accepted Offers", openLink, ,2000)
-	ShellRun(openLink)
-	return
-}
-
-dealerBuys(){
-	searchTerm := searchTermClean()
-	Sleep, 200
-	Clipboard := searchTerm
-	dealershipID := getDealerID(searchTerm)
-	companyName := dealershipID[2]
-	GroupID := dealershipID[5]
-	dealershipID := dealershipID[1]
-	if !(GroupID = "") {
-		openLink := "https://caroffer-reports.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.IncomingDetails&p_detailRange=MTD&p_buyingDealershipID=" . GroupID . "&p_ReportLevel=DETAIL&rdAgReset=True"
-			toast("Opening Dealer Group Wholesale", openLink, ,5000)
-			Shellrun(openLink)
-	} else if !(dealershipID = "") {
-		openLink := "https://caroffer-reports.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.IncomingDetails&p_detailRange=MTD&p_buyingDealershipID=" . dealershipID . "&p_ReportLevel=DETAIL&rdAgReset=True"
-			toast("Opening Dealer Wholesale", openLink, ,2000)
-			Shellrun(openLink)
-	} else {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-	}
-}
-
-dealerOG(){
-	searchTerm := searchTermClean()
-	Sleep, 200
-	Clipboard := searchTerm
-	dealershipID := getDealerID(searchTerm)
-	dealershipID := dealershipID[1]
-	if (dealershipID  = "") {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-		return
-	}
-	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=" . dealershipID . "&p_offerAccept=&p_og=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
-	openlink := URI_URLEncode(openLink)
-	toast("Opening Dealer OfferGuards", openLink, ,2000)
-	ShellRun(openLink)
-	return
-}
-
-dealerPuts(){
-	searchTerm := searchTermClean()
-	Sleep, 200
-	Clipboard := searchTerm
-	dealershipID := getDealerID(searchTerm)
-	dealershipID := dealershipID[1]
-	if (dealershipID  = "") {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-		return
-	}
-	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=" . dealershipID  "&p_offerAccept=&p_putAccept=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
-	openlink := URI_URLEncode(openLink)
-	toast("Opening Dealer Put Bids", openLink, ,2000)
-	ShellRun(openLink)
-	return
-}
 
 VINAnalysis(){
 	searchTerm := Trim(searchTermClean())
@@ -670,7 +426,7 @@ VINAnalysis(){
 	return
 }
 
-;https://www.carfaxonline.com/vhrs/3N1CP5CU8KL559485
+ ;https://www.carfaxonline.com/vhrs/3N1CP5CU8KL559485
 
 carfaxSearch(){
 	searchTerm := Trim(searchTermClean())
@@ -687,23 +443,6 @@ carfaxSearch(){
 	toast("Searching CarFax", openLink, ,2000)
 	shellrun(openLink)
 	Clipboard := searchTerm
-	return
-}
-
-matrixOverview(){
-	searchTerm := searchTermClean()
-	Sleep, 200
-	Clipboard := searchTerm
-	dealershipID := getDealerID(searchTerm)
-	dealershipID := dealershipID[1]
-	if (dealershipID  = "") {
-		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
-		return
-	}
-	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixOverview&p_dealershipID=" . dealershipID . "&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
-	openlink := URI_URLEncode(openLink)
-	toast("Opening Dealer Matrix Overview", openLink, ,2000)
-	ShellRun(openLink)
 	return
 }
 
@@ -732,86 +471,35 @@ carGurus(){
 	Clipboard := carGurus
 }
 
-removeTabs(){
-	oldClip := searchTermClean()
-	oldClip := StrReplace(oldClip, "`n",  " ")
-	oldClip := StrReplace(oldClip, "`r",  " ")
-	oldClip := StrReplace(oldClip, A_tab,  " ")
-	oldClip := StrReplace(oldClip, A_Space,  " ")
-	Clipboard := oldClip
-	Clip(oldClip)
-	return
-}
-
-yearmakemodelformat(){
-	oldClip := Clipboard
-		oldClip2 := Clip()
-		if (oldClip2 != "")
-		  oldClip := oldClip2
-	tempvar := RegExMatch(oldClip, "([A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{8})", VinNumbervar)
-	tempvar := RegExMatch(oldClip, "((19|20)\d\d{1})([\w\s].*)(\n|\s)", YearMakeModelVin2)
-	YearMakeModelVin2 := StrReplace(YearMakeModelVin2, "`n",  " ")
-	YearMakeModelVin2 := StrReplace(YearMakeModelVin2, "`r",  "")
-	YearMakeModelVin2 := StrReplace(YearMakeModelVin2, A_tab,  " ")
-	YearMakeModel := caseChange(Yeavar,"T")
-	YearMakeModelVin2 := caseChange(YearMakeModelVin2,"T")
-	YearMakeModelVin := YearMakeModelVin2 " - " VinNumbervar
-	Clipboard := YearMakeModelVin
-	return
-}
-
-yearmakemodelformat2(){
-	oldClip := Clipboard
-	oldClip2 := Clip()
-	if (oldClip2 != "")
-	  oldClip := oldClip2
-	  StringSplit, searchTermArray, oldClip, `n,
-	  Loop, %searchTermArray0%
-	   {
-		searchTermTemp := searchTermArray%A_Index%
-		if (RegExMatch(searchTermTemp, "((19|20)\d\d{1}\s)([\w\s].*)(\n|\s)", YearMakeModelVin2)){
-			searchTerm2%A_Index% := searchTermTemp
-			searchTerm2 := StrReplace(StrReplace(StrReplace(caseChange(searchTerm2%A_Index%,"T"), A_Tab,  " "), "`r",  ""), "`n",  " ")
-		}
-		if (RegExMatch(searchTermTemp, "([A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{8})", VinNumbervar)){
-			searchTerm%A_Index% := searchTermTemp
-			searchTerm := StrReplace(searchTerm%A_Index%, A_Tab,  " ")
-			searchTerm := StrReplace(StrReplace(searchTerm, "`r",  ""), "`n",  " ")
-			; ArrayIndex += 1
-			searchTermFinal%A_Index%  := searchTerm2 " - " searchTerm
-			ArrayIndexLess := (%A_Index% - 1)
-			searchTermFinal := searchTermFinal%ArrayIndexLess% "`n" searchTermFinal%A_Index%
-		}
-		if (RegExMatch(searchTermTemp, "[\r\n]*(Sell Today)[\r\n]", offerVar)){
-			nextIndex := (A_Index + 1)
-			offerVar := searchTermArray%nextIndex%
-			searchTermFinal := searchTermFinal " - Sell Today: " offerVar
-		}
-	   }
-	if (searchTermFinal){
+searchHubspot(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (hubspotID) {
+		openLink := "https://app.hubspot.com/contacts/5712725/company/" . hubspotID
+		toast(dealershipName "`nHubspot", openLink, ,3000)
 	} else {
-		toast("Tip:", "`nHighlight Right to Left`nfrom Sell Today to the Year Make Model ", ,5000)
+		openLink := "https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=" . searchTerm
+			toast("Opening Hubspot and Searching:", searchTerm, ,2000)
 	}
-	Clipboard := searchTermFinal
-	toast("Success! Copied to Clipboard:", searchTermFinal, ,3000, true)
-	return
+	Shellrun(openLink)
 }
 
-vehicleinfopaste(){
-	linestoParse := WinClip.gettext(Clip())
-	StringSplit, linestoParse, linestoParse, `n,
-	Loop, %linestoParse0%
-	{
-		A_lineMinus := (A_Index - 1)
-		A_LinePlus := (A_Index + 1)
-		if (RegExMatch(linestoParse%A_Index%, "([A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{8})", VinNumbervar))
-			makemodel := StrReplace(linestoParse%A_lineMinus% . " - " . VinNumbervar, "`r", "")
-		if (RegExMatch(linestoParse%A_Index%, "\$.*", pricevar))
-			finalText := finalText "`n" makemodel . " - " . pricevar
+searchCompanyContacts(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (hubspotID) {
+		openLink := "https://app.hubspot.com/contacts/5712725/contacts/list/view/all/?associatedcompanyid=" . hubspotID
+		noti := "Opening " . companyName . " Contacts in Hubspot"
+		toast(dealershipName "`nHubspot", openLink, ,3000)
+	} else {
+		openLink := "https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=" . searchTerm
+			toast("Opening Hubspot and Searching:", searchTerm, ,2000)
 	}
-	Clipboard := finalText
-	toast("Success! Copied to Clipboard:", finalText, ,3000, true)
-		return
+	Shellrun(openLink)
 }
 
 handsellCopy(){
@@ -842,6 +530,285 @@ handsellCopy(){
 	texttopaste := Vehicle " - " VIN " - " Miles " - " Price "`n" hreflink[2]
 	toast("Success! Copied to Clipboard:", texttopaste, 12 ,3000, true)
 	Clipboard := texttopaste
+	return
+}
+
+vehicleinfopaste(){
+	linestoParse := WinClip.gettext(Clip())
+	StringSplit, linestoParse, linestoParse, `n,
+	Loop, %linestoParse0%
+	{
+		A_lineMinus := (A_Index - 1)
+		A_LinePlus := (A_Index + 1)
+		if (RegExMatch(linestoParse%A_Index%, "([A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{8})", VinNumbervar))
+			makemodel := StrReplace(linestoParse%A_lineMinus% . " - " . VinNumbervar, "`r", "")
+		if (RegExMatch(linestoParse%A_Index%, "\$.*", pricevar))
+			finalText := finalText "`n" makemodel . " - " . pricevar
+	}
+	Clipboard := finalText
+	toast("Success! Copied to Clipboard:", finalText, ,3000, true)
+		return
+}
+
+yearmakemodelformat2(){
+ 	oldClip := Clipboard
+ 	oldClip2 := Clip()
+ 	if (oldClip2 != "")
+ 	  oldClip := oldClip2
+ 	  StringSplit, searchTermArray, oldClip, `n,
+ 	  Loop, %searchTermArray0%
+ 		{
+ 		searchTermTemp := searchTermArray%A_Index%
+ 		if (RegExMatch(searchTermTemp, "((19|20)\d\d{1}\s)([\w\s].*)(\n|\s)", YearMakeModelVin2)){
+ 			searchTerm2%A_Index% := searchTermTemp
+ 			searchTerm2 := StrReplace(StrReplace(StrReplace(caseChange(searchTerm2%A_Index%,"T"), A_Tab,  " "), "`r",  ""), "`n",  " ")
+ 		}
+ 		if (RegExMatch(searchTermTemp, "([A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{8})", VinNumbervar)){
+ 			searchTerm%A_Index% := searchTermTemp
+ 			searchTerm := StrReplace(searchTerm%A_Index%, A_Tab,  " ")
+ 			searchTerm := StrReplace(StrReplace(searchTerm, "`r",  ""), "`n",  " ")
+ 			; ArrayIndex += 1
+ 			searchTermFinal%A_Index%  := searchTerm2 " - " searchTerm
+ 			ArrayIndexLess := (%A_Index% - 1)
+ 			searchTermFinal := searchTermFinal%ArrayIndexLess% "`n" searchTermFinal%A_Index%
+ 		}
+ 		if (RegExMatch(searchTermTemp, "[\r\n]*(Sell Today)[\r\n]", offerVar)){
+ 			nextIndex := (A_Index + 1)
+ 			offerVar := searchTermArray%nextIndex%
+ 			searchTermFinal := searchTermFinal " - Sell Today: " offerVar
+ 		}
+ 		}
+ 	if (searchTermFinal){
+ 	} else {
+ 		toast("Tip:", "`nHighlight Right to Left`nfrom Sell Today to the Year Make Model ", ,5000)
+ 	}
+ 	Clipboard := searchTermFinal
+ 	toast("Success! Copied to Clipboard:", searchTermFinal, ,3000, true)
+ 	return
+ }
+
+searchVXDealer(){
+ 	searchTerm := searchTermClean()
+ 	searchTerm := StrReplace(searchTerm, " ", "%20")
+ 	if (searchTerm = "") {
+ 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+ 	}
+ 	openlink := "https://admin.pearlsolutions.com/Home/Portal#/dealerships?search=" . searchTerm
+ 	toast("Opening Dealer Search in VX Admin", openLink, ,2000)
+ 	ShellRun(openlink)
+ }
+
+dealerstats(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (GroupID) {
+		searchTerm := "p_groupids=" . GroupID
+	} else if (dealershipID) {
+	   searchTerm := "p_dealershipIDs=" . dealershipID
+	} else {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+		return
+	}
+   openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerStatsSummary&" . searchTerm
+	toast(dealershipName "`nDealer Stats Summary", openLink, ,2000)
+	ShellRun(openLink)
+	return
+}
+
+;~ http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerExclusions&rdAjaxCommand=RefreshElement&pDealershipID=
+
+dealerExclu(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (GroupID) {
+	   searchTerm := "pDealershipGroupID=" . GroupID
+   } else if (dealershipID) {
+   	searchTerm := "pdealershipID=" . dealershipID
+	} else {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+		return
+	}
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerExclusions&" . searchTerm
+	toast(dealershipName "`nDealer Exclusions", openLink, ,2000)
+	ShellRun(openLink)
+	return
+}
+
+matrixOverview(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (dealershipID  = "") {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+		return
+	}
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixOverview&p_dealershipID=" . dealershipID . "&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
+	toast(dealershipName "`nMatrix Overview", openLink, ,2000)
+	ShellRun(openLink)
+	return
+}
+
+dealerCDS(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (dealershipID  = "") {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+		return
+	}
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&islDealer=" . dealershipID . "&LinkHref=True="
+	toast(dealershipName "`nCDS Report", openLink, ,2000)
+	ShellRun(openLink)
+	return
+}
+
+groupCDS(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (GroupID  = "") {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+		return
+	}
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&p_groupid=" . GroupID . "&LinkHref=True="
+	toast(groupName "`nCDS Report", openLink, ,2000)
+	ShellRun(openLink)
+	return
+}
+
+groupWholeSale(){
+	searchTerm := searchTermClean()
+	GroupID := getDealerID(Trim(searchTerm))
+	dealershipID := GroupID[1]
+	GroupID := GroupID[5]
+	if !(GroupID = "") {
+		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerInventoryOffers&p_groupid="  . GroupID . "&p_reportType=&p_wholesale=W&LinkHref=True"
+			toast("Opening Dealer Group Wholesale", openLink, ,5000)
+			Shellrun(openLink)
+	} else if !(dealershipID = "") {
+		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerInventoryOffers&p_dealershipid="  . dealershipID . "&p_reportType=&p_wholesale=W&LinkHref=True"
+			toast("Opening Dealer Wholesale", openLink, ,2000)
+			Shellrun(openLink)
+	} else {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+	}
+}
+
+auctionCaps(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (dealershipID) {
+	   searchTerm := "p_dealershipID=" . dealershipID
+	} else {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+		return
+	}
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.Auction.MMRCapsNew&" . searchTerm
+	toast("Opening Dealer Auction Caps", openLink, ,2000)
+	;~ openlink := URI_URLEncode(openLink)
+	ShellRun(openLink)
+	return
+}
+
+;=http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&islDealer=9614&LinkHref=True
+
+dealerAccepts(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (dealershipID  = "") {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+		return
+	}
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=" . dealershipID . "&p_offerAccept=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
+	toast(dealershipName "`nAccepted Offers", openLink, ,2000)
+	ShellRun(openLink)
+	return
+}
+
+dealerBuys(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (GroupID) {
+		openLink := "https://caroffer-reports.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.IncomingDetails&p_detailRange=MTD&p_buyingDealershipID=" . GroupID . "&p_ReportLevel=DETAIL&rdAgReset=True"
+			toast(GroupID "`nWholesale", openLink, ,5000)
+			Shellrun(openLink)
+	} else if (dealershipID) {
+		openLink := "https://caroffer-reports.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.IncomingDetails&p_detailRange=MTD&p_buyingDealershipID=" . dealershipID . "&p_ReportLevel=DETAIL&rdAgReset=True"
+			toast("`nWholesale", openLink, ,2000)
+			Shellrun(openLink)
+	} else {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+	}
+}
+
+dealerOG(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (dealershipID  = "") {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+		return
+	}
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=" . dealershipID . "&p_offerAccept=&p_og=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
+	toast(dealershipName "`nOfferGuards", openLink, ,2000)
+	ShellRun(openLink)
+	return
+}
+
+dealerPuts(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (dealershipID = "") {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+		return
+	}
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=" . dealershipID  "&p_offerAccept=&p_putAccept=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
+	toast(dealershipName "`nPut Bids", openLink, ,2000)
+	ShellRun(openLink)
+	return
+}
+
+removeTabs(){
+	oldClip := searchTermClean()
+	oldClip := StrReplace(oldClip, "`n",  " ")
+	oldClip := StrReplace(oldClip, "`r",  " ")
+	oldClip := StrReplace(oldClip, A_tab,  " ")
+	oldClip := StrReplace(oldClip, A_Space,  " ")
+	Clipboard := oldClip
+	Clip(oldClip)
+	return
+}
+
+yearmakemodelformat(){
+	oldClip := Clipboard
+		oldClip2 := Clip()
+		if (oldClip2 != "")
+		  oldClip := oldClip2
+	tempvar := RegExMatch(oldClip, "([A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{8})", VinNumbervar)
+	tempvar := RegExMatch(oldClip, "((19|20)\d\d{1})([\w\s].*)(\n|\s)", YearMakeModelVin2)
+	YearMakeModelVin2 := StrReplace(YearMakeModelVin2, "`n",  " ")
+	YearMakeModelVin2 := StrReplace(YearMakeModelVin2, "`r",  "")
+	YearMakeModelVin2 := StrReplace(YearMakeModelVin2, A_tab,  " ")
+	YearMakeModel := caseChange(Yeavar,"T")
+	YearMakeModelVin2 := caseChange(YearMakeModelVin2,"T")
+	YearMakeModelVin := YearMakeModelVin2 " - " VinNumbervar
+	Clipboard := YearMakeModelVin
 	return
 }
 
@@ -936,8 +903,6 @@ cleanRename(){
 ;JEE_ExpWinSetDir ;set Explorer window folder (navigate) (or open file/url in new window)
 ;=====================================================================================
 ;=====================================================================================
-
-
 
 ;=========================================JEEE========================================
 ;functions for Desktop and Explorer folder windows:
@@ -2336,7 +2301,7 @@ _BITMAPtoDIB_cleanup:
 ;{=====================================================================================
 ;} ====================================================================================
 
-;======================URL Encode===================
+;======================================URL Encode======================================
 
 URI_Encode(URI, RE="[0-9A-Za-z]"){
 	VarSetCapacity(Var, StrPut(URI, "UTF-8"), 0), StrPut(URI, &Var, "UTF-8")
@@ -2375,8 +2340,8 @@ URI_URLDecode(URL){
 ;~ ;Msgbox % URI_Encode("hi hello")
 ;~ Msgbox % URI_Encode("On British TV's ""Top of the Pops" "this Booker T. & the MGs hit might be titled ""Spring Onions")
 ;~ return
-
-;=========================================Reload==================================
+;}=========================================Reload==================================
+;{=========================================Reload==================================
 
 reloadAsAdmin(force:=True){
 	if A_IsAdmin
@@ -2397,7 +2362,7 @@ reloadAsAdmin_Task(force:=True) { ;  By SKAN,  http://goo.gl/yG6A1F,  CD:19/Aug/
 
   CmdLine       := ( A_IsCompiled ? "" : """"  A_AhkPath """" )  A_Space  ( """" A_ScriptFullpath """"  )
   TaskName      := A_ScriptName " @" SubStr( "000000000"  DllCall( "NTDLL\RtlComputeCrc32"
-				   , "Int",0, "WStr",CmdLine, "UInt",StrLen( CmdLine ) * 2, "UInt" ), -9 )
+					, "Int",0, "WStr",CmdLine, "UInt",StrLen( CmdLine ) * 2, "UInt" ), -9 )
 
   Try {
 	Try TaskRoot := TaskSchd.GetFolder("\AHK-ReloadAsAdmin")
@@ -2416,7 +2381,7 @@ reloadAsAdmin_Task(force:=True) { ;  By SKAN,  http://goo.gl/yG6A1F,  CD:19/Aug/
 
   else if !TaskExists {
 
-  	if (A_ScriptDir = A_MyDocuments){
+	if (A_ScriptDir = A_MyDocuments){
 	XML := "
 	(LTrim Join
 	  <?xml version=""1.0"" ?><Task xmlns=""http://schemas.microsoft.com/windows/2004/02/mit/task""><Regi
@@ -2458,10 +2423,9 @@ use_TrayIcon(Script, Action) { ; use tray icon actions of a running AHK script
 	DetectHiddenWindows, On
 	PostMessage, 0x111, % a[Action],,, %Script% - AutoHotkey
 }
+;}===============================================================================
 
-;================================================================================
-
-;=========================================Clip==================================
+;{=========================================Clip==================================
 Clip(Text="", Reselect="")
 {
 	Static BackUpClip, Stored, LastClip
@@ -2624,18 +2588,18 @@ ShellRun(prms*)
 
 ;====================================== EXAMPLE ===================================
 
-; toast("Menu Tip:", "https://google.com", ,2000)
+toast("Menu Tip:", "https://google.com", ,2000)
 
-toast(t, msg, s:=14, l:=2000, n:="") {
+toast(t, msg:="", s:=14, l:=2000, n:="") {
 		static toastCount:=0
 		toastCount++
 		this.id:=toastCount
-		msglen := Ceil((StrLen(msg)/80))
-	 	if (n = ""){
+		msglen := Ceil((StrLen(msg)/70))
+		if (n = ""){
 			Loop, %msgLen%
 				{
-					chars := ((A_Index*80)-79)
-					splitmsg := SubStr(msg, chars, 80)
+					chars := ((A_Index*70)-69)
+					splitmsg := SubStr(msg, chars, 70)
 					if (A_Index = 1)
 						splitmsgnew := splitmsg
 					else
@@ -2657,8 +2621,8 @@ toast(t, msg, s:=14, l:=2000, n:="") {
 			pX := "center"
 			pY := "center"
 		}
-		Gui, %GUI_handle%: Margin, 10,10 
-		Gui, %GUI_handle%: Font, Bold s%s% c%c% %o%, %f% 
+		Gui, %GUI_handle%: Margin, 10,10
+		Gui, %GUI_handle%: Font, Bold s%s% c%c% %o%, %f%
 		Gui, %GUI_handle%: Add, Text, +Center w600, %t%
 		Gui, %GUI_handle%: Font, norm s%s% c%c% %o%, %f%
 		Gui, %GUI_handle%: Add, Text, +Center w600, %msg%
@@ -2666,8 +2630,9 @@ toast(t, msg, s:=14, l:=2000, n:="") {
 		setTimer, closeGUI, % "-"l
 		; closekeys:=["~Space","~LButton","~Esc"]
 		; for _,k in closekeys
-		; 	Hotkey, % k , closeGUI, On B0 T1
+		;  Hotkey, % k , closeGUI, On B0 T1
 		; return
+		return
 }
 
 closeGUI:
@@ -2680,11 +2645,12 @@ return
 ;{=================================Start Hotkeys=========================================
 
 ; Triggers for Menu
-NumpadEnter::Send {NumpadEnter}
+; NumpadEnter::Send {NumpadEnter}
+; return
 
-NumpadEnter & NumpadAdd::
-	casemenu.Show()
-return
+; NumpadEnter & NumpadAdd::
+;  casemenu.Show()
+; return
 
 *CapsLock::
 state := GetKeyState("CapsLock", "T")
@@ -2728,8 +2694,6 @@ escKey:
 return
 
 ;;=======================================================================================
-
-
 ;;=======================================================================================
 ;;================================== Copy To ============================================
 ;;=======================================================================================
