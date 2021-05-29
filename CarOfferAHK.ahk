@@ -126,15 +126,15 @@ if !(A_ScriptDir = A_MyDocuments){
 ;{==================================ToggleKeys=========================================
 ;} ====================================================================================
 
-; CapsLockOffTimer(t:=60000){
-;  if ((A_TimeIdleKeyboard>t) AND GetKeyState("CapsLock","T")){
-;     SetCapsLockState,Off
-;     ; SetTimer, CapsLockOffTimer, Off
-;     return True
-;  }
-;  return False
-;}
-
+if !(A_ScriptDir = A_MyDocuments){
+	try {
+	 FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
+	 ExitApp
+	} catch {
+	 msgbox, catch
+	}
+	ExitApp
+}
 
 class caseMenu {
 	__new(){
