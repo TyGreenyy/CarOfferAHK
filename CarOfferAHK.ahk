@@ -49,8 +49,8 @@ updateScript() {                     ;Create Directory Structure - Update script
 		}
 }
 
-;{ ============================== Copy From ===============================================
 ;} ====================================================================================
+;{ ============================== Copy From ===============================================
 
 ;{ ============================== Notes ===============================================
 ; All directives(that are settings) and many commands appear here irvrespective of its need
@@ -114,19 +114,6 @@ trayMenu(){
 Suspend, Off
 
 if !(A_ScriptDir = A_MyDocuments){
-	; try {
-	;  FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
-	;  ExitApp
-	; } catch {
-	;  msgbox, catch
-	; }
-	; ExitApp
-}
-
-;{==================================ToggleKeys=========================================
-;} ====================================================================================
-
-if !(A_ScriptDir = A_MyDocuments){
 	try {
 	 FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
 	 ExitApp
@@ -135,6 +122,19 @@ if !(A_ScriptDir = A_MyDocuments){
 	}
 	ExitApp
 }
+
+;{==================================ToggleKeys=========================================
+;} ====================================================================================
+
+; CapsLockOffTimer(t:=60000){
+;  if ((A_TimeIdleKeyboard>t) AND GetKeyState("CapsLock","T")){
+;     SetCapsLockState,Off
+;     ; SetTimer, CapsLockOffTimer, Off
+;     return True
+;  }
+;  return False
+;}
+
 
 class caseMenu {
 	__new(){
