@@ -2645,12 +2645,12 @@ return
 ;{=================================Start Hotkeys=========================================
 
 ; Triggers for Menu
-; NumpadEnter::Send {NumpadEnter}
-; return
+ NumpadEnter::Send {NumpadEnter}
+return
 
-; NumpadEnter & NumpadAdd::
-;  casemenu.Show()
-; return
+NumpadEnter & NumpadAdd::
+  casemenu.Show()
+return
 
 *CapsLock::
 state := GetKeyState("CapsLock", "T")
