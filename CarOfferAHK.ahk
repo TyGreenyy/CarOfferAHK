@@ -706,13 +706,13 @@ auctionCaps(){
 	VXID := StrSplit(getDealerID(searchTerm), "&&")
 	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
 	if (dealershipID) {
-	   searchTerm := "p_dealershipID=" . dealershipID
+		searchTerm := "p_dealershipID=" . dealershipID
 	} else {
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
 	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.Auction.MMRCapsNew&" . searchTerm
-	toast("Opening Dealer Auction Caps", openLink, ,2000)
+	toast(dealershipName "`nAuction Caps", openLink, ,2000)
 	;~ openlink := URI_URLEncode(openLink)
 	ShellRun(openLink)
 	return
