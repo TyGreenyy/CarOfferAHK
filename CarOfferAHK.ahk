@@ -2667,9 +2667,17 @@ Send, {CapsLock Up}
 return
 
 ~>+CapsLock::
-ScrollLock::
-~Insert::
+toast(GetKeyState("CapsLock","T")? "CapsLock On":"CapsLock Off", , , 1000)
 return
+
+ScrollLock::
+toast(GetKeyState("ScrollLock","T")? "ScrollLock On":"ScrollLock Off", , , 1000)
+return
+
+~Insert::
+toast(GetKeyState("Insert","T")? "Insert On":"Insert Off", , , 1000)
+return
+
 
 ; Restart Script
 ^Esc::
