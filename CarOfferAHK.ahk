@@ -2666,7 +2666,7 @@ Send, {CapsLock Up}
 return
 
 ~>+CapsLock::
-toast(GetKeyState("CapsLock","T")? "CapsLock On":"CapsLock Off", , , 1000)
+; toast(GetKeyState("CapsLock","T")? "CapsLock On":"CapsLock Off", , , 1000)
 return
 
 ScrollLock::
