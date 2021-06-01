@@ -2588,7 +2588,7 @@ ShellRun(prms*)
 
 ;====================================== EXAMPLE ===================================
 
-toast("Menu Tip:", "https://google.com", ,2000)
+;toast("Menu Tip:", "https://google.com", ,2000)
 
 toast(t, msg:="", s:=14, l:=2000, n:="") {
 		static toastCount:=0
