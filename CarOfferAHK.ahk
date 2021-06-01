@@ -685,16 +685,15 @@ groupCDS(){
 
 groupWholeSale(){
 	searchTerm := searchTermClean()
-	GroupID := getDealerID(Trim(searchTerm))
-	dealershipID := GroupID[1]
-	GroupID := GroupID[5]
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
 	if !(GroupID = "") {
 		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerInventoryOffers&p_groupid="  . GroupID . "&p_reportType=&p_wholesale=W&LinkHref=True"
-			toast("Opening Dealer Group Wholesale", openLink, ,5000)
+			toast(dealershipName "`nWholesale", openLink, ,5000)
 			Shellrun(openLink)
 	} else if !(dealershipID = "") {
 		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerInventoryOffers&p_dealershipid="  . dealershipID . "&p_reportType=&p_wholesale=W&LinkHref=True"
-			toast("Opening Dealer Wholesale", openLink, ,2000)
+			toast(dealershipName "`nWholesale", openLink, ,2000)
 			Shellrun(openLink)
 	} else {
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
