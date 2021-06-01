@@ -49,9 +49,6 @@ updateScript() {                     ;Create Directory Structure - Update script
 		}
 }
 
-;} ====================================================================================
-;{ ============================== Copy From ===============================================
-
 ;{ ============================== Notes ===============================================
 ; All directives(that are settings) and many commands appear here irvrespective of its need
 ; The directives/commands that are default are commented by ";;" ,
@@ -118,9 +115,7 @@ if !(A_ScriptDir = A_MyDocuments){
 	 FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
 	 ExitApp
 	} catch {
-	 msgbox, catch
 	}
-	ExitApp
 }
 
 ;{==================================ToggleKeys=========================================
@@ -173,7 +168,7 @@ class caseMenu {
 		Menu, caseMenu, Add
 
 
-		for _, j in [["phoneFormat","###-###-####"],["phoneFormatPara","(###) ###-####"],["googlefileDownload","Google Drive DL Link"],["fileRename","File &Rename"],["cleanRename","Clean Rename"],["urlencode","URL Encode"]]
+		for _, j in [["phoneFormat","###-###-####"],["phoneFormatPara","(###) ###-####"],["googlefileDownload","Google Drive DL Link"],["fileRename","File &Rename"],["cleanRename","Clean Rename"]]
 
 		{
 		act:=ObjBindMethod(this,"textFormat",j[1])
@@ -226,9 +221,9 @@ class caseMenu {
 
 	show() {
  ;        for _, i in ["&Numlock","Sc&rollLock","I&nsert"]
-	; 	;~ sleep, 500*
-	; 	for _, i in ["&Numlock","Sc&rollLock","I&nsert"]
-	; 		Menu, caseMenu, % GetKeyState(strReplace(i,"&"),"T")?"Check":"Uncheck", % i
+	;  ;~ sleep, 500*
+	;  for _, i in ["&Numlock","Sc&rollLock","I&nsert"]
+	;     Menu, caseMenu, % GetKeyState(strReplace(i,"&"),"T")?"Check":"Uncheck", % i
 
 			Menu, caseMenu, Show, % A_CaretX, % (A_Carety+25)
 		return
@@ -478,7 +473,7 @@ searchHubspot(){
 	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
 	if (hubspotID) {
 		openLink := "https://app.hubspot.com/contacts/5712725/company/" . hubspotID
-		toast(dealershipName "`nHubspot", openLink, ,3000)
+		toast(dealershipName "`nHubspot" , openLink, ,3000)
 	} else {
 		openLink := "https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=" . searchTerm
 			toast("Opening Hubspot and Searching:", searchTerm, ,2000)
@@ -551,51 +546,51 @@ vehicleinfopaste(){
 }
 
 yearmakemodelformat2(){
- 	oldClip := Clipboard
- 	oldClip2 := Clip()
- 	if (oldClip2 != "")
- 	  oldClip := oldClip2
- 	  StringSplit, searchTermArray, oldClip, `n,
- 	  Loop, %searchTermArray0%
- 		{
- 		searchTermTemp := searchTermArray%A_Index%
- 		if (RegExMatch(searchTermTemp, "((19|20)\d\d{1}\s)([\w\s].*)(\n|\s)", YearMakeModelVin2)){
- 			searchTerm2%A_Index% := searchTermTemp
- 			searchTerm2 := StrReplace(StrReplace(StrReplace(caseChange(searchTerm2%A_Index%,"T"), A_Tab,  " "), "`r",  ""), "`n",  " ")
- 		}
- 		if (RegExMatch(searchTermTemp, "([A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{8})", VinNumbervar)){
- 			searchTerm%A_Index% := searchTermTemp
- 			searchTerm := StrReplace(searchTerm%A_Index%, A_Tab,  " ")
- 			searchTerm := StrReplace(StrReplace(searchTerm, "`r",  ""), "`n",  " ")
- 			; ArrayIndex += 1
- 			searchTermFinal%A_Index%  := searchTerm2 " - " searchTerm
- 			ArrayIndexLess := (%A_Index% - 1)
- 			searchTermFinal := searchTermFinal%ArrayIndexLess% "`n" searchTermFinal%A_Index%
- 		}
- 		if (RegExMatch(searchTermTemp, "[\r\n]*(Sell Today)[\r\n]", offerVar)){
- 			nextIndex := (A_Index + 1)
- 			offerVar := searchTermArray%nextIndex%
- 			searchTermFinal := searchTermFinal " - Sell Today: " offerVar
- 		}
- 		}
- 	if (searchTermFinal){
- 	} else {
- 		toast("Tip:", "`nHighlight Right to Left`nfrom Sell Today to the Year Make Model ", ,5000)
- 	}
- 	Clipboard := searchTermFinal
- 	toast("Success! Copied to Clipboard:", searchTermFinal, ,3000, true)
- 	return
+	oldClip := Clipboard
+	oldClip2 := Clip()
+	if (oldClip2 != "")
+	  oldClip := oldClip2
+	  StringSplit, searchTermArray, oldClip, `n,
+	  Loop, %searchTermArray0%
+		{
+		searchTermTemp := searchTermArray%A_Index%
+		if (RegExMatch(searchTermTemp, "((19|20)\d\d{1}\s)([\w\s].*)(\n|\s)", YearMakeModelVin2)){
+			searchTerm2%A_Index% := searchTermTemp
+			searchTerm2 := StrReplace(StrReplace(StrReplace(caseChange(searchTerm2%A_Index%,"T"), A_Tab,  " "), "`r",  ""), "`n",  " ")
+		}
+		if (RegExMatch(searchTermTemp, "([A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{8})", VinNumbervar)){
+			searchTerm%A_Index% := searchTermTemp
+			searchTerm := StrReplace(searchTerm%A_Index%, A_Tab,  " ")
+			searchTerm := StrReplace(StrReplace(searchTerm, "`r",  ""), "`n",  " ")
+			; ArrayIndex += 1
+			searchTermFinal%A_Index%  := searchTerm2 " - " searchTerm
+			ArrayIndexLess := (%A_Index% - 1)
+			searchTermFinal := searchTermFinal%ArrayIndexLess% "`n" searchTermFinal%A_Index%
+		}
+		if (RegExMatch(searchTermTemp, "[\r\n]*(Sell Today)[\r\n]", offerVar)){
+			nextIndex := (A_Index + 1)
+			offerVar := searchTermArray%nextIndex%
+			searchTermFinal := searchTermFinal " - Sell Today: " offerVar
+		}
+		}
+	if (searchTermFinal){
+	} else {
+		toast("Tip:", "`nHighlight Right to Left`nfrom Sell Today to the Year Make Model ", ,5000)
+	}
+	Clipboard := searchTermFinal
+	toast("Success! Copied to Clipboard:", searchTermFinal, ,3000, true)
+	return
  }
 
 searchVXDealer(){
- 	searchTerm := searchTermClean()
- 	searchTerm := StrReplace(searchTerm, " ", "%20")
- 	if (searchTerm = "") {
- 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
- 	}
- 	openlink := "https://admin.pearlsolutions.com/Home/Portal#/dealerships?search=" . searchTerm
- 	toast("Opening Dealer Search in VX Admin", openLink, ,2000)
- 	ShellRun(openlink)
+	searchTerm := searchTermClean()
+	searchTerm := StrReplace(searchTerm, " ", "%20")
+	if (searchTerm = "") {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+	}
+	openlink := "https://admin.pearlsolutions.com/Home/Portal#/dealerships?search=" . searchTerm
+	toast("Opening Dealer Search in VX Admin", openLink, ,2000)
+	ShellRun(openlink)
  }
 
 dealerstats(){
@@ -606,12 +601,12 @@ dealerstats(){
 	if (GroupID) {
 		searchTerm := "p_groupids=" . GroupID
 	} else if (dealershipID) {
-	   searchTerm := "p_dealershipIDs=" . dealershipID
+		searchTerm := "p_dealershipIDs=" . dealershipID
 	} else {
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
-   openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerStatsSummary&" . searchTerm
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.DealerStatsSummary&" . searchTerm
 	toast(dealershipName "`nDealer Stats Summary", openLink, ,2000)
 	ShellRun(openLink)
 	return
@@ -625,9 +620,9 @@ dealerExclu(){
 	VXID := StrSplit(getDealerID(searchTerm), "&&")
 	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
 	if (GroupID) {
-	   searchTerm := "pDealershipGroupID=" . GroupID
-   } else if (dealershipID) {
-   	searchTerm := "pdealershipID=" . dealershipID
+		searchTerm := "pDealershipGroupID=" . GroupID
+	} else if (dealershipID) {
+		searchTerm := "pdealershipID=" . dealershipID
 	} else {
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
@@ -818,6 +813,7 @@ googlefileDownload(){
 	searchTerm := StrSplit(searchTerm, "/")
 	searchTerm := searchTerm[3]
 	googlefileDownload := "https://drive.google.com/uc?export=download&id=" . searchTerm
+
 	Clipboard := googlefileDownload
 		return
 }
@@ -2643,12 +2639,12 @@ return
 
 ;{=================================Start Hotkeys=========================================
 
-; Triggers for Menu
- NumpadEnter::Send {NumpadEnter}
+;Triggers for Menu
+NumpadEnter::Send {NumpadEnter}
 return
 
 NumpadEnter & NumpadAdd::
-  casemenu.Show()
+ casemenu.Show()
 return
 
 *CapsLock::
@@ -2670,13 +2666,12 @@ return
 return
 
 ScrollLock::
-toast(GetKeyState("ScrollLock","T")? "ScrollLock On":"ScrollLock Off", , , 1000)
+; toast(GetKeyState("ScrollLock","T")? "ScrollLock On":"ScrollLock Off", , , 1000)
 return
 
 ~Insert::
-toast(GetKeyState("Insert","T")? "Insert On":"Insert Off", , , 1000)
+; toast(GetKeyState("Insert","T")? "Insert On":"Insert Off", , , 1000)
 return
-
 
 ; Restart Script
 ^Esc::
@@ -2704,5 +2699,6 @@ return
 ;;=======================================================================================
 ;;================================== Copy To ============================================
 ;;=======================================================================================
+
 return
 ExitApp
