@@ -43,7 +43,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   global version := whr.ResponseText
 
   RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
-  if (version = 181){                                             ;Downloads new .ahk if version does not match
+  if (version = 191){                                             ;Downloads new .ahk if version does not match
 	  } else {
 		 UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
 		}
@@ -762,11 +762,11 @@ dealerBuys(){
 	VXID := StrSplit(getDealerID(searchTerm), "&&")
 	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
 	if (GroupID) {
-		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_detailRange=MTD&p_groupid=&p_hasoffer=&p_nooffer=&p_offerAccept=&p_overmmr=&p_putAccept=&p_ReportLevel=DETAIL&p_reportType=&p_undermmr=&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form&rdAfFilterColumnID_rdAgAnalysisFilter=colBuyingDealershipName&rdAfFilterOperator_rdAgAnalysisFilter=Contains&rdAfFilterValue_rdAgAnalysisFilter=" . dealershipName . "&rdAgId=AnalysisGrid1&rdAgDraggablePanels=True&rdAgPanelOrder=rowTable&rdAfMode_rdAgAnalysisFilter=Design&rdAfCommand=FilterAdd&rdAnalysisFilterID=rdAgAnalysisFilter"
+		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_detailRange=MTD&p_groupid=&p_hasoffer=&p_nooffer=&p_offerAccept=&p_overmmr=&p_putAccept=&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form&rdAfFilterColumnID_rdAgAnalysisFilter=colBuyingDealershipName&rdAfFilterOperator_rdAgAnalysisFilter=Contains&rdAfFilterValue_rdAgAnalysisFilter=" . dealershipName . "&rdAgId=AnalysisGrid1&rdAgDraggablePanels=True&rdAgPanelOrder=rowTable&rdAfCommand=FilterAdd&rdAnalysisFilterID=rdAgAnalysisFilter"
 			toast(dealershipName "`nWholesale", "http://ops.pearlsolutions.com/", ,5000)
 			Shellrun(openLink)
 	} else if (dealershipID) {
-		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_detailRange=MTD&p_groupid=&p_hasoffer=&p_nooffer=&p_offerAccept=&p_overmmr=&p_putAccept=&p_ReportLevel=DETAIL&p_reportType=&p_undermmr=&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form&rdAfFilterColumnID_rdAgAnalysisFilter=colBuyingDealershipName&rdAfFilterOperator_rdAgAnalysisFilter=Contains&rdAfFilterValue_rdAgAnalysisFilter=" . dealershipName . "&rdAgId=AnalysisGrid1&rdAgDraggablePanels=True&rdAgPanelOrder=rowTable&rdAfMode_rdAgAnalysisFilter=Design&rdAfCommand=FilterAdd&rdAnalysisFilterID=rdAgAnalysisFilter"
+		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_detailRange=MTD&p_groupid=&p_hasoffer=&p_nooffer=&p_offerAccept=&p_overmmr=&p_putAccept=&p_ReportLevel=DETAIL&p_reportType=&p_undermmr=&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form&rdAfFilterColumnID_rdAgAnalysisFilter=colBuyingDealershipName&rdAfFilterOperator_rdAgAnalysisFilter=Contains&rdAfFilterValue_rdAgAnalysisFilter=" . dealershipName . "&rdAgId=AnalysisGrid1&rdAgDraggablePanels=True&rdAgPanelOrder=rowTable&rdAfCommand=FilterAdd&rdAnalysisFilterID=rdAgAnalysisFilter"
 			toast(dealershipName "`nWholesale", "http://ops.pearlsolutions.com/", ,2000)
 			Shellrun(openLink)
 	} else {
