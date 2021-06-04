@@ -48,6 +48,7 @@ updateScript() {                     ;Create Directory Structure - Update script
 		 UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
 		}
 }
+
 ;{ ============================== Copy From ===============================================
 ;} ====================================================================================
 ;{ ============================== Notes ===============================================
@@ -157,7 +158,7 @@ class caseMenu {
 		;Seperator One
 		Menu, caseMenu, Add
 
-		for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupCDS","Search Group &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["matrixChanges","Show Matrix Changes","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
+		for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupCDS","Search Group &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["matrixChanges","Show Matrix Changes","19"],["dealerBuys","Search Dealer Buys","2"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -761,16 +762,17 @@ dealerBuys(){
 	VXID := StrSplit(getDealerID(searchTerm), "&&")
 	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
 	if (GroupID) {
-		openLink := "https://caroffer-reports.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.IncomingDetails&p_detailRange=MTD&p_buyingDealershipID=" . GroupID . "&p_ReportLevel=DETAIL&rdAgReset=True"
-			toast(GroupID "`nWholesale", openLink, ,5000)
+		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_detailRange=TODAY&p_groupid=&p_hasoffer=&p_nooffer=&p_offerAccept=&p_overmmr=&p_putAccept=&p_ReportLevel=DETAIL&p_reportType=&p_undermmr=&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form&rdAfFilterColumnID_rdAgAnalysisFilter=colBuyingDealershipName&rdAfFilterOperator_rdAgAnalysisFilter=Contains&rdAfFilterValue_rdAgAnalysisFilter=" . dealershipName . "&rdAgId=AnalysisGrid1&rdAgDraggablePanels=True&rdAgPanelOrder=rowTable&rdAfMode_rdAgAnalysisFilter=Design&rdAfCommand=FilterAdd&rdAnalysisFilterID=rdAgAnalysisFilter"
+			toast(dealershipName "`nWholesale", "http://ops.pearlsolutions.com/", ,5000)
 			Shellrun(openLink)
 	} else if (dealershipID) {
-		openLink := "https://caroffer-reports.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.IncomingDetails&p_detailRange=MTD&p_buyingDealershipID=" . dealershipID . "&p_ReportLevel=DETAIL&rdAgReset=True"
-			toast("`nWholesale", openLink, ,2000)
+		openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_detailRange=TODAY&p_groupid=&p_hasoffer=&p_nooffer=&p_offerAccept=&p_overmmr=&p_putAccept=&p_ReportLevel=DETAIL&p_reportType=&p_undermmr=&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form&rdAfFilterColumnID_rdAgAnalysisFilter=colBuyingDealershipName&rdAfFilterOperator_rdAgAnalysisFilter=Contains&rdAfFilterValue_rdAgAnalysisFilter=" . dealershipName . "&rdAgId=AnalysisGrid1&rdAgDraggablePanels=True&rdAgPanelOrder=rowTable&rdAfMode_rdAgAnalysisFilter=Design&rdAfCommand=FilterAdd&rdAnalysisFilterID=rdAgAnalysisFilter"
+			toast(dealershipName "`nWholesale", "http://ops.pearlsolutions.com/", ,2000)
 			Shellrun(openLink)
 	} else {
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 	}
+	return
 }
 
 dealerOG(){
@@ -2734,5 +2736,6 @@ return
 ;;=======================================================================================
 ;;================================== Copy To ============================================
 ;;=======================================================================================
+
 return
 ExitApp
