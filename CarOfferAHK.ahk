@@ -716,6 +716,11 @@ auctionCaps(){
 ;=http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.carOfferInvPerf&islDealer=9614&LinkHref=True
 
 dealerAccepts(){
+	p_manualStart := ""
+	p_manualStart := A_YYYY . A_MM . "01"
+	p_manualStart += -30, day
+	FormatTime, p_manualStart, %p_manualStart%, M/1/yyyy
+	FormatTime, p_manualEnd, , M/d/yyyy
 	searchTerm := searchTermClean()
 	Sleep, 200
 	VXID := StrSplit(getDealerID(searchTerm), "&&")
@@ -724,7 +729,7 @@ dealerAccepts(){
 		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
 		return
 	}
-	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=" . dealershipID . "&p_offerAccept=1&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.transactionAcceptDetails&p_dealershipID=" . dealershipID . "&p_offerAccept=1&p_manualStart=" . p_manualStart . "&p_manualEnd=" . p_manualEnd . "&p_ReportLevel=DETAIL&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
 	toast(dealershipName "`nAccepted Offers", openLink, ,2000)
 	ShellRun(openLink)
 	return
