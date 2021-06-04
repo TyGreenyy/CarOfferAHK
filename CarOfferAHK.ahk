@@ -444,11 +444,15 @@ carfaxSearch(){
 
 jiraFunc(){
 	searchTerm := searchTermClean()
+	if (RegExMatch(searchTerm, "O)COPS(\s|\-)?(\d+)", SubPat)){
+		searchTerm := SubPat.Value(2)
+	}
 	openLink := "https://caroffer.atlassian.net/secure/QuickSearch.jspa?searchString=" . searchTerm
 	shellrun(openLink)
 	toast("Searching JIRA", openLink, ,2000)
 	clipboardLink = %searchTerm%
 	Clipboard := clipboardLink
+	return
 }
 
 carGurus(){
