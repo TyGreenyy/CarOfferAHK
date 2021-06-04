@@ -48,7 +48,8 @@ updateScript() {                     ;Create Directory Structure - Update script
 		 UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
 		}
 }
-
+;{ ============================== Copy From ===============================================
+;} ====================================================================================
 ;{ ============================== Notes ===============================================
 ; All directives(that are settings) and many commands appear here irvrespective of its need
 ; The directives/commands that are default are commented by ";;" ,
@@ -156,7 +157,7 @@ class caseMenu {
 		;Seperator One
 		Menu, caseMenu, Add
 
-		for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupCDS","Search Group &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
+		for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupCDS","Search Group &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["matrixChanges","Show Matrix Changes","19"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
 
 		{
 			act:=ObjBindMethod(this,"textFormat",j[1])
@@ -644,6 +645,21 @@ matrixOverview(){
 	}
 	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixOverview&p_dealershipID=" . dealershipID . "&rdAgReset=True&LinkHref=True&rdRequestForwarding=Form"
 	toast(dealershipName "`nMatrix Overview", openLink, ,2000)
+	ShellRun(openLink)
+	return
+}
+
+matrixChanges(){
+	searchTerm := searchTermClean()
+	Sleep, 200
+	VXID := StrSplit(getDealerID(searchTerm), "&&")
+	dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
+	if (dealershipID = "") {
+		toast("No Match Found", "`nHighlight a Dealer Name", ,5000)
+		return
+	}
+	openlink := "http://ops.pearlsolutions.com/rdPage.aspx?rdAjaxCommand=RefreshElement&rdRefreshElementID=history,historyid&p_dealerid=" . dealershipID . "&rdReport=Caroffer.Matrix.MatrixAdvisor&rdFeedbackShowElementID=history&rdFeedbackHideElementID=history&&rdDisableRememberExpansion_menuTreeSide=True&p_group=TL&rdActiveTabIndex_Matrix=7&Matrix=MatriQty&rdShowElementHistory="
+	toast(dealershipName "`nMatrix Changes", openLink, ,2000)
 	ShellRun(openLink)
 	return
 }
@@ -2714,6 +2730,5 @@ return
 ;;=======================================================================================
 ;;================================== Copy To ============================================
 ;;=======================================================================================
-
 return
 ExitApp
