@@ -450,11 +450,12 @@ jiraFunc(){
     }
     openLink := "https://caroffer.atlassian.net/secure/QuickSearch.jspa?searchString=" . searchTerm
     shellrun(openLink)
-    toast("Searching JIRA", openLink, ,2000)
+    toast("Searching JIRA", searchTerm, ,2000)
     clipboardLink = %searchTerm%
     Clipboard := clipboardLink
     return
 }
+
 
 carGurus(){
     searchTerm := Trim(searchTermClean())
