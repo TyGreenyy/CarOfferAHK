@@ -437,7 +437,7 @@ carfaxSearch(){
         return
     }
     openLink := "https://www.carfaxonline.com/vhrs/" . searchTerm
-    toast("Searching CarFax", openLink, ,2000)
+    toast("Searching CarFax", searchTerm, ,2000)
     shellrun(openLink)
     Clipboard := searchTerm
     return
@@ -495,7 +495,7 @@ searchCompanyContacts(){
     if (hubspotID) {
         openLink := "https://app.hubspot.com/contacts/5712725/contacts/list/view/all/?associatedcompanyid=" . hubspotID
         noti := "Opening " . companyName . " Contacts in Hubspot"
-        toast(dealershipName "`nHubspot", openLink, ,3000)
+        toast(dealershipName "`nHubspot", "", ,3000)
     } else {
         openLink := "https://app.hubspot.com/reports-dashboard/5712725/view/4177402?globalSearchQuery=" . searchTerm
             toast("Opening Hubspot and Searching:", searchTerm, ,2000)
