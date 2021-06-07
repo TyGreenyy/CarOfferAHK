@@ -456,7 +456,6 @@ jiraFunc(){
     return
 }
 
-
 carGurus(){
     searchTerm := Trim(searchTermClean())
     if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
@@ -469,7 +468,7 @@ carGurus(){
     }
     carGurus := "https://www.cargurus.com/Cars/instantMarketValueFromVIN.action?startUrl=%2F&++++carDescription.vin%0D%0A=" . searchTerm
     ShellRun(carGurus)
-    toast("Searching CarGurus Instant Market Value", carGurus, ,2000)
+    toast("Searching CarGurus Instant Market Value", searchTerm, ,2000)
     Clipboard := carGurus
 }
 
