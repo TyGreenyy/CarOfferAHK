@@ -535,8 +535,8 @@ handsellCopy(){
                }
            }
             Clipboard := html
-             NewHTML := StrReplace(html, "href", "¢href")
-             Loop, Parse, NewHTML, ¢
+             NewHTML := StrReplace(html, "href", "@href")
+             Loop, Parse, NewHTML, @
               {
                    regexformula := "O)href\s*=\s*['""]?([^""']+)"
                    if  (RegExMatch(A_Loopfield, regexformula, hreflink)){
