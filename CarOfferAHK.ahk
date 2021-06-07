@@ -417,7 +417,7 @@ VINAnalysis(){
         return
     }
     openLink := "http://ops.pearlsolutions.com/rdPage.aspx?rdReport=Caroffer.MatrixAnalysis&p_action=R&VIN=" . searchTerm . "&p_vin=" . searchTerm
-    toast("Searching VIN Analysis", openLink, ,2000)
+    toast("Searching VIN Analysis", searchTerm, ,2000)
     shellrun(openLink)
     Clipboard := searchTerm
     return
