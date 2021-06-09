@@ -493,7 +493,7 @@ searchCompanyContacts(){
     VXID := StrSplit(getDealerID(searchTerm), "&&")
     dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
     if (hubspotID) {
-        openLink := "https://app.hubspot.com/contacts/5712725/contacts/list/view/all/?associatedcompanyid=" . hubspotID
+        openLink := "https://app.hubspot.com/contacts/5712725/contacts/list/view/5841435/?associatedcompanyid=" . hubspotID
         noti := "Opening " . companyName . " Contacts in Hubspot"
         toast(dealershipName "`nHubspot", "", ,3000)
     } else {
