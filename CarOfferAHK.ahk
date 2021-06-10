@@ -2647,6 +2647,10 @@ toast(t, msg:="", s:=14, l:=2000, n:="") {
         static toastCount:=0
         toastCount++
         this.id:=toastCount
+        CurrentMonitorIndex:=GetCurrentMonitorIndex()
+        GetClientSize(GUI_Hwnd,GUI_Width,GUI_Height)
+        GUI_X:=CoordXCenterScreen(GUI_Width,CurrentMonitorIndex)
+		GUI_Y:=CoordYCenterScreen(GUI_Height,CurrentMonitorIndex)
         msglen := Ceil((StrLen(msg)/70))
         if (n = ""){
             Loop, %msgLen%
@@ -2669,10 +2673,10 @@ toast(t, msg:="", s:=14, l:=2000, n:="") {
         Gui, %GUI_handle%: Color, 0x222222
         Gui, %GUI_handle%: +LastFoundExist
         WinSet, Trans, 200
-        pX := A_CaretX, pY:= A_CaretY
+        pX :=  GUI_X-350, pY:=  GUI_Y-100
         if (pX = "" OR py = ""){
-            pX := "center"
-            pY := "center"
+            pX := GUI_X
+            pY := GUI_Y
         }
         Gui, %GUI_handle%: Margin, 10,10
         Gui, %GUI_handle%: Font, Bold s%s% c%c% %o%, %f%
@@ -2692,6 +2696,40 @@ closeGUI:
         GUI_handle := "Toast_GUI" this.id
         Gui, %GUI_handle%: Destroy
 return
+
+GetCurrentMonitorIndex(){
+	CoordMode, Mouse, Screen
+	MouseGetPos, mx, my
+	SysGet, monitorsCount, 80
+
+	Loop %monitorsCount%{
+		SysGet, monitor, Monitor, %A_Index%
+		if (monitorLeft <= mx && mx <= monitorRight && monitorTop <= my && my <= monitorBottom){
+			Return A_Index
+			}
+		}
+		Return 1
+}
+
+CoordXCenterScreen(WidthOfGUI,ScreenNumber)
+{
+SysGet, Mon1, Monitor, %ScreenNumber%
+	return (( Mon1Right-Mon1Left - WidthOfGUI ) / 2) + Mon1Left
+}
+
+CoordYCenterScreen(HeightofGUI,ScreenNumber)
+{
+SysGet, Mon1, Monitor, %ScreenNumber%
+	return (Mon1Bottom - 30 - HeightofGUI ) / 2
+}
+
+GetClientSize(hwnd, ByRef w, ByRef h)
+{
+    VarSetCapacity(rc, 16)
+    DllCall("GetClientRect", "uint", hwnd, "uint", &rc)
+    w := NumGet(rc, 8, "int")
+    h := NumGet(rc, 12, "int")
+}
 
 ;}================================END OF FUNCTIONS=======================================
 
