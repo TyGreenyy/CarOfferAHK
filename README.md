@@ -4,7 +4,7 @@
 
 **2.** *Right-Click* > *Save Link As* > to Download/Save [CarOfferAHK](https://github.com/TyGreenyy/CarOfferAHK/raw/main/CarOfferAHK.ahk) and place the file in your Documents Folder. 
 
-**3.** Launch by double clicking the CarOFferAHK file in your Documents folder. 
+**3.** Launch by double clicking the CarOfferAHK file in your Documents folder. 
 
 **4.** On first run, script will reload as admin and create a startup task in Windows TaskScheduler. The next time you boot your machine, the script will automatically run. 
 
