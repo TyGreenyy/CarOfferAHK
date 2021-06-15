@@ -15,7 +15,7 @@
   
   If no text is highlighted, it will check the Clipboard. 
  
-  Use **Ctrl+CapsLock** OR **NumpadEnter+NumpaddAdd** to open the menu.
+  Use **Ctrl+CapsLock** OR **NumpadEnter+NumpaddAdd** to open the menu. You can also press and hold **CapsLock** for 0.2 Seconds. 
   
   Restart the program at any time by holding **Ctrl** and quickly pressing **Escape** twice.
 
