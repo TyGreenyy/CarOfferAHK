@@ -9,7 +9,7 @@
 **4.** On first run, script will reload as admin and create a startup task in Windows TaskScheduler. The next time you boot your machine, the script will automatically run. 
 
 
-<b>Guide:</b>  
+**Guide:** 
 
   Most commands work with the text you have highlighted. 
   
