@@ -24,9 +24,9 @@
   Why are you using the CapsLock key anyways?
   
 -- 
-  
-![image](https://user-images.githubusercontent.com/56348646/118030381-d5173b80-b32a-11eb-8ba9-2c830d1c628f.png)
 
 ![image](https://user-images.githubusercontent.com/56348646/122282202-c1726e00-ceb0-11eb-9675-b3f8410a2789.png)
+
+![image](https://user-images.githubusercontent.com/56348646/118030381-d5173b80-b32a-11eb-8ba9-2c830d1c628f.png)
 
 --
