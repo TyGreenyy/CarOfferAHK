@@ -242,27 +242,6 @@ caseChange(text,type){ ; type: U=UPPER, L=Lower, T=Title, S=Sentence, I=Invert
     return text
 }
 
-TGL_ExpWinGetSel(){
-    WinGet, hwndtmp, ID, A
-    WinActivate, %hwndtmp%,
-    Clipboard := JEE_ExpWinGetSel(hwndtmp)D
-}
-
-TGL_ExpWinGetSel_Private(){
-    WinGet, hwndtmp, ID, A
-    WinActivate, %hwndtmp%,
-    linestoParse := JEE_ExpWinGetSel(hwndtmp)
-    Loop, parse, linestoParse, `n, `r  ; Specifying `n prior to `r allows both Windows and Unix files to be parsed.
-    {
-        SplitPath, A_LoopField, newFilename
-        if (A_Index = 1)
-            Clipboard := newfilename
-        else
-            Clipboard := Clipboard . "`n" newfilename
-        ; MsgBox, 4, , Line number %A_Index% is %A_LoopField%.`n`nContinue?
-        ; IfMsgBox, No, break
-    }
-}
 
 cutFunc(){
     Send, ^x
