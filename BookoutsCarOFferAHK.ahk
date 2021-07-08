@@ -137,7 +137,7 @@ class caseMenu {
         ;Seperator One
         Menu, caseMenu, Add
 
-        for _, j in [["ChryslerBook","Bookout Chrysler"],["KiaBook","Bookout Kia"],["FordBook","Bookout Ford"]]
+        for _, j in [["AudiBook","Bookout Audi/VW"], ["ChryslerBook","Bookout Chrysler"], ["FordBook","Bookout Ford"], ["KiaBook","Bookout Kia"], ["LexusBook","Bookout Lexus"], ["MitsuBook","Bookout Mitsubishi"]]
 
         {
             act:=ObjBindMethod(this,"textFormat",j[1])
@@ -331,7 +331,67 @@ getGroupID(searchTerm){
         }
  }
 
-;~https://www.chrysler.com/hostd/windowsticker/getWindowStickerPdf.do?vin=
+;~http://windowsticker-prod.aws.manheim.com/windowsticker/ . searchTerm . /4905414?lang=en_US
+
+;~http://windowsticker-prod.aws.manheim.com/windowsticker/ .  . /4905414?lang=en_US
+
+AudiBook(){
+    searchTerm := Trim(searchTermClean())
+    if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    if !(StrLen(searchTerm) = 17){
+        ; Check VIN
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    openLink := "http://windowsticker-prod.aws.manheim.com/windowsticker/" . searchTerm . "/4905414?lang=en_US"
+    toast("Searching VIN Analysis", searchTerm, ,2000)
+    shellrun(openLink)
+    Clipboard := searchTerm
+    return
+}
+
+;~http://windowsticker-prod.aws.manheim.com/windowsticker/WAUF2AFC8GN016923/4905414?lang=en_US
+
+VWBook(){
+    searchTerm := Trim(searchTermClean())
+    if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    if !(StrLen(searchTerm) = 17){
+        ; Check VIN
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    openLink := "http://windowsticker-prod.aws.manheim.com/windowsticker/" . WAUF2AFC8GN016923 . "/4905414?lang=en_US"
+    toast("Searching VIN Analysis", searchTerm, ,2000)
+    shellrun(openLink)
+    Clipboard := searchTerm
+    return
+}
+
+;~https://www.mitsubishicars.com/rs/file/monroney?vin=JA32W8FVXEU012194
+
+MitsuBook(){
+    searchTerm := Trim(searchTermClean())
+    if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    if !(StrLen(searchTerm) = 17){
+        ; Check VIN
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    openLink := "https://www.mitsubishicars.com/rs/file/monroney?vin=" . searchTerm
+    toast("Searching VIN Analysis", searchTerm, ,2000)
+    shellrun(openLink)
+    Clipboard := searchTerm
+    return
+}
 
 ChryslerBook(){
     searchTerm := Trim(searchTermClean())
@@ -365,6 +425,26 @@ KiaBook(){
         return
     }
     openLink := "https://www.kia.com/us/services/en/windowsticker/load/" . searchTerm 
+    toast("Searching VIN Analysis", searchTerm, ,2000)
+    shellrun(openLink)
+    Clipboard := searchTerm
+    return
+}
+
+;~ https://drivers.lexus.com//lexusdrivers/resources/vehicle-specs%23/collapseTwo&sa=D&source=hangouts&ust=1595079087399000&usg=AFQjCNGklQiMQ_ziTy1mbHD4_xJR10Mimg
+
+LexusBook(){
+    searchTerm := Trim(searchTermClean())
+    if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    if !(StrLen(searchTerm) = 17){
+        ; Check VIN
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    openLink := "https://drivers.lexus.com/lexusdrivers/resources/viewSpecifications?redirect_uri=/lexusdrivers/resources/vehicle-specshttps://drivers.lexus.com/lexusdrivers/resources/viewSpecs?vin=" . searchTerm 
     toast("Searching VIN Analysis", searchTerm, ,2000)
     shellrun(openLink)
     Clipboard := searchTerm
