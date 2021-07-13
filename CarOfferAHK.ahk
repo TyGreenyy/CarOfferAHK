@@ -154,7 +154,9 @@ class caseMenu {
         {
             act:=ObjBindMethod(this,"textFormat",j[1])
             Menu, caseMenu, Add, % j[2], % act
+            try {
             Menu, caseMenu, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
+            }
         }
 
         ;Seperator One
@@ -165,18 +167,22 @@ class caseMenu {
         {
             act:=ObjBindMethod(this,"textFormat",j[1])
             Menu, caseMenu, Add, % j[2], % act
+            try {
             Menu, caseMenu, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
+            }
         }
 
         ;Seperator One
         Menu, caseMenu, Add
 
-        for _, j in [["searchVXDealer","Search V&XDealer","25"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupCDS","Search Group &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["matrixChanges","Show Matrix Changes","19"],["dealerBuys","Search Dealer Buys","2"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
+        for _, j in [["searchVXDealer","Search V&XDealer","25"],["searchGmail","Search Gmail","50"],["dealerstats","Search DealerStats","3"],["dealerCDS","Search Dealer &CDS","17"],["groupCDS","Search Group &CDS","17"],["groupWholeSale","Search Wholesale Units","17"],["auctionCaps","Search Auction Caps","22"],["dealerExclu","Search Dealer Exclusions","23"],["matrixOverview","Search Matrix Overview","19"],["matrixChanges","Show Matrix Changes","19"],["dealerBuys","Search Dealer Buys","2"],["dealerAccepts","Search Dealer &Accepts","2"],["dealerOG","Search Dealer &OfferGuards","10"],["dealerPuts","Search Dealer P&uts","9"]]
 
         {
             act:=ObjBindMethod(this,"textFormat",j[1])
             Menu, caseMenu, Add, % j[2], % act
+            try {
             Menu, caseMenu, Icon, % j[2], %A_MyDocuments%\CarOfferAHK\resources\imageres.dll , % j[3]
+            } 
         }
 
         ;Seperator Two
@@ -662,6 +668,16 @@ searchVXDealer(){
         toast("Opening Dealer Search in VX Admin", searchTerm, ,2000)
         ShellRun(openlink)
      }
+     
+searchGmail(){
+    searchTerm := searchTermClean()
+    openLink := "https://mail.google.com/mail/u/0/#search/" . searchTerm
+    shellrun(openLink)
+    toast("Searching Gmail", searchTerm, ,2000)
+    clipboardLink = %searchTerm%
+    Clipboard := clipboardLink
+    return
+ }
 
 dealerstats(){
     searchTerm := searchTermClean()
