@@ -842,11 +842,11 @@ dealerBuys(){
     VXID := StrSplit(getDealerID(searchTerm), "&&")
     dealershipName := VXID[1], dealershipID := VXID[2], hubspotID := VXID[3], groupName := VXID[4], GroupID := VXID[5]
     if (GroupID) {
-        openLink := "http://ops.pearlsolutions.com/rdPage.aspx?&rdReport=Caroffer.transactionAcceptDetails&p_detailRange=MTD&p_ReportLevel=DETAIL&rdAgReset=True&rdRequestForwarding=Form&rdAfFilterColumnID_rdAgAnalysisFilter=colBuyingDealershipID&rdAfFilterOperator_rdAgAnalysisFilter=Contains&rdAfFilterValue_rdAgAnalysisFilter=" . dealershipID . " &rdAgId=AnalysisGrid1&rdAgPanelOrder=rowTable&rdAfCommand=FilterAdd&rdAnalysisFilterID=rdAgAnalysisFilter"
+        openLink := "http://ops.pearlsolutions.com/rdPage.aspx?&rdReport=Caroffer.transactionAcceptDetails&&p_BuyingDealershipID=" . dealershipID . "&p_detailRange=MTD&p_ReportLevel=DETAIL&rdAgReset=True&rdRequestForwarding=Form"
             toast(dealershipName "`nBuys", "http://ops.pearlsolutions.com/", ,5000)
             Shellrun(openLink)
     } else if (dealershipID) {
-        openLink := "http://ops.pearlsolutions.com/rdPage.aspx?&rdReport=Caroffer.transactionAcceptDetails&p_detailRange=MTD&p_ReportLevel=DETAIL&rdAgReset=True&rdRequestForwarding=Form&rdAfFilterColumnID_rdAgAnalysisFilter=colBuyingDealershipID&rdAfFilterOperator_rdAgAnalysisFilter=Contains&rdAfFilterValue_rdAgAnalysisFilter=" . dealershipID . " &rdAgId=AnalysisGrid1&rdAgPanelOrder=rowTable&rdAfCommand=FilterAdd&rdAnalysisFilterID=rdAgAnalysisFilter"
+        openLink := "http://ops.pearlsolutions.com/rdPage.aspx?&rdReport=Caroffer.transactionAcceptDetails&&p_BuyingDealershipID=" . dealershipID . "&p_detailRange=MTD&p_ReportLevel=DETAIL&rdAgReset=True&rdRequestForwarding=Form"
             toast(dealershipName "`nBuys", "http://ops.pearlsolutions.com/", ,2000)
             Shellrun(openLink)
     } else {
