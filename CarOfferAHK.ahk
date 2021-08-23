@@ -8,6 +8,7 @@
 reloadAsAdmin_Task()         ;Runs reloadAsAdmin task
 Suspend, On                     ;Suspend Script for Update
 
+
 directoryMove(){
     if !(A_ScriptDir = A_MyDocuments){
         FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
@@ -15,10 +16,10 @@ directoryMove(){
         try {
         Run, %A_MyDocuments%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk /restart /f
             } catch { 
-                Sleep, 3000
-                ExitApp
+                Sleep, 6000
+		updateScript() 
+		ExitApp
             }
-
         } else {
 
     }
@@ -43,7 +44,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   global version := whr.ResponseText
 
   RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
-  if (version = 282){                                             ;Downloads new .ahk if version does not match
+  if (version = 292){                                             ;Downloads new .ahk if version does not match
       } else {
          UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
         }
