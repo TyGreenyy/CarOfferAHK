@@ -1,3 +1,6 @@
+
+
+
 ; =====================================================================================
 ; AHK Version ...: AHK 1.1.32.00 (Unicode 64-bit) - December 22, 2020
 ; Platform ......: Windows 10
@@ -163,7 +166,7 @@ class caseMenu {
         ;Seperator One
         Menu, caseMenu, Add
 
-        for _, j in [["VINAnalysis","Search &VIN","2"],["VINAnalysisNEW","NEW Search &VIN","2"],["carfaxSearch","Search CarFax","26"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["searchCompanyContacts","Search Dealer Contacts","5"],["getHubspotEngagement","Get Hubspot Activity URL","5"],["handsellCopy","Copy Multiple Handsell Units","16"],["vehicleinfopaste","Copy Multiple Units - Portal","17"],["yearmakemodelformat2","Copy Multiple Offers - Portal","17"]]
+        for _, j in [["VINAnalysis","Search &VIN","2"],["VINAnalysisNEW","NEW Search &VIN","2"],["carfaxSearch","Search CarFax","26"],["mmrsearch","Get MMR"","26"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["searchCompanyContacts","Search Dealer Contacts","5"],["getHubspotEngagement","Get Hubspot Activity URL","5"],["handsellCopy","Copy Multiple Handsell Units","16"],["vehicleinfopaste","Copy Multiple Units - Portal","17"],["yearmakemodelformat2","Copy Multiple Offers - Portal","17"]]
 
         {
             act:=ObjBindMethod(this,"textFormat",j[1])
@@ -477,6 +480,26 @@ carfaxSearch(){
     }
     openLink := "https://www.carfaxonline.com/vhrs/" . searchTerm
     toast("Searching CarFax", searchTerm, ,2000)
+    shellrun(openLink)
+    Clipboard := searchTerm
+    return
+}
+
+ ;https://mmr.manheim.com/?WT.svl=m_uni_hdr_sell&classic=false&country=US&mid=201800600170173&popup=true&source=man&vin=3GNCJLSB8KL255468
+
+mmrsearch(){
+    searchTerm := Trim(searchTermClean())
+    if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    if !(StrLen(searchTerm) = 17){
+        ; Check VIN
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    openLink := ";https://mmr.manheim.com/?WT.svl=m_uni_hdr_sell&classic=false&country=US&mid=201800600170173&popup=true&source=man&vin=" . searchTerm
+    toast("Searching for MMR Value", searchTerm, ,2000)
     shellrun(openLink)
     Clipboard := searchTerm
     return
