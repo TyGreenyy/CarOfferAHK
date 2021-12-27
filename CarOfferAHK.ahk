@@ -47,7 +47,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   global version := whr.ResponseText
 
   RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
-  if (version = 314){                                             ;Downloads new .ahk if version does not match
+  if (version = 324){                                             ;Downloads new .ahk if version does not match
       } else {
          UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
         }
@@ -498,7 +498,7 @@ mmrsearch(){
         toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
         return
     }
-    openLink := ";https://mmr.manheim.com/?WT.svl=m_uni_hdr_sell&classic=false&country=US&mid=201800600170173&popup=true&source=man&vin=" . searchTerm
+    openLink := "https://mmr.manheim.com/?WT.svl=m_uni_hdr_sell&classic=false&country=US&mid=201800600170173&popup=true&source=man&vin=" . searchTerm
     toast("Searching for MMR Value", searchTerm, ,2000)
     shellrun(openLink)
     Clipboard := searchTerm
