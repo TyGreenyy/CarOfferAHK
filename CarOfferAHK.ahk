@@ -489,7 +489,6 @@ carfaxSearch(){
 
 mmrsearch(){
     searchTerm := Clip()
-    ; MsgBox % StrSplit(searchTerm,  " - ", " - ")
     for index, count in StrSplit(searchTerm,  ["-"," "], ["-"," "]){
        if (StrLen(trim(count)) = 17){
            vinIndex := index, VIN := count
