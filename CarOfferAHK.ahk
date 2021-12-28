@@ -488,20 +488,30 @@ carfaxSearch(){
  ;https://mmr.manheim.com/?WT.svl=m_uni_hdr_sell&classic=false&country=US&mid=201800600170173&popup=true&source=man&vin=3GNCJLSB8KL255468
 
 mmrsearch(){
-    searchTerm := Trim(searchTermClean())
-    if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
+    searchTerm := Clip()
+    ; MsgBox % StrSplit(searchTerm,  " - ", " - ")
+    for index, count in StrSplit(searchTerm,  ["-"," "], ["-"," "]){
+       if (StrLen(trim(count)) = 17){
+           vinIndex := index, VIN := count
+        }
+        if (RegexMatch(searchTerm, "20(\d{2,2})", yearv)){
+            yearIndex := index, year := yearv
+        }
+        if (RegexMatch(searchTerm, "Miles(\:\s?)(\d{2,6})", miles)){
+            milesIndex := index, miles := StrSplit(miles,"Miles:","Miles:")
+        }
+    }
+    if (VIN && miles[2]){
+        toast("Searching for MMR Value", (yearv ? "Year: " yearv "`n": "" ) . (miles[2] ? "Miles: " miles[2] "`n" : "") . (VIN ? "VIN: " VIN : ""))
+    } else if (VIN){
+        toast("Searching for MMR Value", (yearv ? "Year: " yearv "`n" : "") . (miles[2] ? "Miles: " miles[2] "`n" : "") . (VIN ? "VIN: " VIN : ""))
+    } else if (!VIN){
         toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
         return
     }
-    if !(StrLen(searchTerm) = 17){
-        ; Check VIN
-        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
-        return
-    }
-    openLink := "https://mmr.manheim.com/?WT.svl=m_uni_hdr_sell&classic=false&country=US&mid=201800600170173&popup=true&source=man&vin=" . searchTerm
-    toast("Searching for MMR Value", searchTerm, ,2000)
+    openLink := "https://mmr.manheim.com/?WT.svl=m_uni_hdr_sell&classic=false&country=US&mid=201800600170173&popup=true&source=man" . (VIN ? "&vin=" VIN : "") . (miles[2] ? "&miles=" miles[2] : "")
     shellrun(openLink)
-    Clipboard := searchTerm
+    Clipboard := VIN
     return
 }
 
