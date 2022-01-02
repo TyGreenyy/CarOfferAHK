@@ -1,7 +1,4 @@
-
-
-
-; =====================================================================================
+;~ ====================================================================================
 ; AHK Version ...: AHK 1.1.32.00 (Unicode 64-bit) - December 22, 2020
 ; Platform ......: Windows 10
 ; Language ......: English (en-US)
@@ -11,47 +8,58 @@
 reloadAsAdmin_Task()         ;Runs reloadAsAdmin task
 Suspend, On                     ;Suspend Script for Update
 
+if (A_UserName = "TG-PC"){
+	global mastercomp := 1
+	global SCR_Folder_Name := "AutoHotkey"
+} else {
+	global mastercomp := 0
+	global SCR_Folder_Name := "CarOfferAHK"
+}
 
 directoryMove(){
-    if !(A_ScriptDir = A_MyDocuments){
-        FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
-        Sleep, 3000
-        try {
-        Run, %A_MyDocuments%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk /restart /f
-            } catch { 
-                Sleep, 6000
-		updateScript() 
-		ExitApp
-            }
-        } else {
-
-    }
-    }
+		if !(A_ScriptDir = A_MyDocuments){
+			FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MyDocuments%\%SCR_Folder_Name%.ahk
+			Sleep, 3000
+			try {
+			Run, %A_MyDocuments%\CarOfferAHK.ahk, %A_MyDocuments%\%SCR_Folder_Name%.ahk /restart /f
+			} catch { 
+				Sleep, 6000
+				updateScript() 
+				ExitApp
+			}
+		} else {
+			Sleep, 5
+	}
+}
 
 updateScript() {                     ;Create Directory Structure - Update script from Github
 
-  if !FileExist("%A_MyDocuments%\CarOfferAHK\")
-      FileCreateDir, %A_MyDocuments%\CarOfferAHK\              ;Create Directory Structure 
-      FileCreateDir, %A_MyDocuments%\CarOfferAHK\resources\             ;Create Directory Structure
+		if !FileExist("%A_MyDocuments%\" . SCR_Folder_Name . "\"){
+			FileCreateDir, %A_MyDocuments%\%SCR_Folder_Name%\              ;Create Directory Structure 
+			FileCreateDir, %A_MyDocuments%\%SCR_Folder_Name%\resources\             ;Create Directory Structure
+		}
+		
+	UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/DealerCodes.ini, %A_MyDocuments%\%SCR_Folder_Name%\resources\DealerCodes.ini
+	UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/CarOfferAHK_Rounded.ico, %A_MyDocuments%\%SCR_Folder_Name%\resources\CarOfferAHK_Rounded.ico
+	UrlDownloadToFile, https://github.com/TyGreenyy/CarOfferAHK/raw/main/resources/imageres.dll, %A_MyDocuments%\%SCR_Folder_Name%\resources\imageres.dll
 
- UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/DealerCodes.ini, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
-  UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/CarOfferAHK_Rounded.ico, %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
-  UrlDownloadToFile, https://github.com/TyGreenyy/CarOfferAHK/raw/main/resources/imageres.dll, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll
+	whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")               ;Create HTTP request to check version
+	whr.Open("GET", "https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/version.md", true)
+	whr.Send()
+	; Using 'true' above and the call below allows the script to remain responsive.
+	whr.WaitForResponse()
+	global version := whr.ResponseText
 
 
-  whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")               ;Create HTTP request to check version
-  whr.Open("GET", "https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/version.md", true)
-  whr.Send()
-  ; Using 'true' above and the call below allows the script to remain responsive.
-  whr.WaitForResponse()
-  global version := whr.ResponseText
-
-  RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
-  if (version = 348){                                             ;Downloads new .ahk if version does not match
-      } else {
-         UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
-        }
-}
+		if (mastercomp = 0) {
+			RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
+			if (version = 348){                                             ;Downloads new .ahk if version does not match
+				} else {
+				 Sleep, 10
+				 ;~ UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
+			}
+		}
+	}
 
 ;{ ============================== Copy From ===============================================
 ;} ====================================================================================
@@ -63,8 +71,9 @@ updateScript() {                     ;Create Directory Structure - Update script
 
 directoryMove()
 updateScript()
+
 caseMenu.__new()                ;creates the caseMenu
-trayMenu()                      ;creates th etraymenu
+			 
 
 #SingleInstance Force
 #include %A_ScriptDir%
@@ -79,17 +88,17 @@ SplitPath, A_MyDocuments, , SCR_UserDir, , ,s
 
 global SCR_Path = A_ScriptDir   ;Sets path for tray menu options
 
-  global Testarray := []
-   Loop, Read, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini ; This loop retrieves each line from the file, one at a time.
-   {
-       Testarray.Push(A_LoopReadLine) ; Append this line to the array.
-   }
-global SettingsINI := A_MyDocuments "\" SCR_Name "\resources\DealerCodes.ini"
+	global Testarray := []
+	 Loop, Read, %A_MyDocuments%\%SCR_Folder_Name%\resources\DealerCodes.ini ; This loop retrieves each line from the file, one at a time.
+	 {
+		 Testarray.Push(A_LoopReadLine) ; Append this line to the array.
+	 }
+	global SettingsINI := A_MyDocuments "\" SCR_Name "\resources\DealerCodes.ini"
 
 IniRead, firstRun, %SettingsINI%, Settings, firstRun%SCR_Name%, %A_Space%
 if (firstRun = "")
 	IniWrite, false, %SettingsINI%, Settings, firstRun%SCR_Name%
-else 
+else
 	IniRead, firstRun, %SettingsINI%, Settings, firstRun%SCR_Name%, %A_Space%
 
 #NoEnv                           ;Donot use default environmental variables.
@@ -122,19 +131,30 @@ CoordMode, Caret, Screen        ;A_CaretX/Y are specified in global co-ords
 CoordMode, Menu, Screen         ;Co-ords for "Menu, Show" are specified in global co-ords
 SetNumLockState, On
 
-trayMenu(){
-    ifexist %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
-        Menu, Tray, Icon, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll, 2
-    }
+trayMenuhere(){
+	ifexist %A_MyDocuments%\%SCR_Folder_Name%\resources\CarOfferAHK_Roundeddd.ico
+		Menu, Tray, Icon, %A_MyDocuments%\%SCR_Folder_Name%\resources\imageres.dll, 2
+
+}
+
+
+
+	#include Autohotkey\lib\MouseExtras.ahk
+	#include Autohotkey\Tray.ahk
+	trayMenu()       ;creates thetraymenu
+
+if !(A_ScriptDir = A_MyDocuments){
+	try {
+	 FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
+	 ExitApp
+	} catch {
+	}
+}
 
 Suspend, Off
 
-if !(A_ScriptDir = A_MyDocuments){
-    try {
-     FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
-     ExitApp
-    } catch {
-    }
+try {
+#include %A_ScriptDir%\Autohotkey\keyRemap.ahk
 }
 
 ;{==================================ToggleKeys=========================================
