@@ -139,9 +139,9 @@ trayMenuhere(){
 
 
 
-	#include Autohotkey\lib\MouseExtras.ahk
-	#include Autohotkey\Tray.ahk
-	trayMenu()       ;creates thetraymenu
+	; #include Autohotkey\lib\MouseExtras.ahk
+	; #include Autohotkey\Tray.ahk
+	; trayMenu()       ;creates thetraymenu
 
 if !(A_ScriptDir = A_MyDocuments){
 	try {
