@@ -1,3 +1,6 @@
+
+
+
 ; =====================================================================================
 ; AHK Version ...: AHK 1.1.32.00 (Unicode 64-bit) - December 22, 2020
 ; Platform ......: Windows 10
@@ -66,7 +69,6 @@ trayMenu()                      ;creates th etraymenu
 #SingleInstance Force
 #include %A_ScriptDir%
 
-
 SetWorkingDir %A_ScriptDir%     ;Set script path as working directory.
 
 global SCR_Name                 ;For tray menu options | SCR_Name, no ext
@@ -77,17 +79,17 @@ SplitPath, A_MyDocuments, , SCR_UserDir, , ,s
 
 global SCR_Path = A_ScriptDir   ;Sets path for tray menu options
 
-	global Testarray := []
-	 Loop, Read, %A_MyDocuments%\%SCR_Folder_Name%\resources\DealerCodes.ini ; This loop retrieves each line from the file, one at a time.
-	 {
-		 Testarray.Push(A_LoopReadLine) ; Append this line to the array.
-	 }
-	global SettingsINI := A_MyDocuments "\" SCR_Name "\resources\DealerCodes.ini"
+  global Testarray := []
+   Loop, Read, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini ; This loop retrieves each line from the file, one at a time.
+   {
+       Testarray.Push(A_LoopReadLine) ; Append this line to the array.
+   }
+global SettingsINI := A_MyDocuments "\" SCR_Name "\resources\DealerCodes.ini"
 
 IniRead, firstRun, %SettingsINI%, Settings, firstRun%SCR_Name%, %A_Space%
 if (firstRun = "")
 	IniWrite, false, %SettingsINI%, Settings, firstRun%SCR_Name%
-else
+else 
 	IniRead, firstRun, %SettingsINI%, Settings, firstRun%SCR_Name%, %A_Space%
 
 #NoEnv                           ;Donot use default environmental variables.
@@ -120,30 +122,19 @@ CoordMode, Caret, Screen        ;A_CaretX/Y are specified in global co-ords
 CoordMode, Menu, Screen         ;Co-ords for "Menu, Show" are specified in global co-ords
 SetNumLockState, On
 
-trayMenuhere(){
-	ifexist %A_MyDocuments%\%SCR_Folder_Name%\resources\CarOfferAHK_Roundeddd.ico
-		Menu, Tray, Icon, %A_MyDocuments%\%SCR_Folder_Name%\resources\imageres.dll, 2
-
-}
-
-
-
-	; #include Autohotkey\lib\MouseExtras.ahk
-	; #include Autohotkey\Tray.ahk
-	; trayMenu()       ;creates thetraymenu
-
-if !(A_ScriptDir = A_MyDocuments){
-	try {
-	 FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
-	 ExitApp
-	} catch {
-	}
-}
+trayMenu(){
+    ifexist %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
+        Menu, Tray, Icon, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll, 2
+    }
 
 Suspend, Off
 
-try {
-; #include %A_ScriptDir%\Autohotkey\keyRemap.ahk
+if !(A_ScriptDir = A_MyDocuments){
+    try {
+     FileDelete, C:\Users\%A_UserName%\Downloads\CarOfferAHK.ahk
+     ExitApp
+    } catch {
+    }
 }
 
 ;{==================================ToggleKeys=========================================
