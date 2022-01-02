@@ -154,7 +154,7 @@ if !(A_ScriptDir = A_MyDocuments){
 Suspend, Off
 
 try {
-#include %A_ScriptDir%\Autohotkey\keyRemap.ahk
+; #include %A_ScriptDir%\Autohotkey\keyRemap.ahk
 }
 
 ;{==================================ToggleKeys=========================================
