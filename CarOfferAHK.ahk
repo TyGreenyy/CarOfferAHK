@@ -1,4 +1,4 @@
-;~ ====================================================================================
+; =====================================================================================
 ; AHK Version ...: AHK 1.1.32.00 (Unicode 64-bit) - December 22, 2020
 ; Platform ......: Windows 10
 ; Language ......: English (en-US)
@@ -8,58 +8,47 @@
 reloadAsAdmin_Task()         ;Runs reloadAsAdmin task
 Suspend, On                     ;Suspend Script for Update
 
-if (A_UserName = "TG-PC"){
-	global mastercomp := 1
-	global SCR_Folder_Name := "AutoHotkey"
-} else {
-	global mastercomp := 0
-	global SCR_Folder_Name := "CarOfferAHK"
-}
 
 directoryMove(){
-		if !(A_ScriptDir = A_MyDocuments){
-			FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MyDocuments%\%SCR_Folder_Name%.ahk
-			Sleep, 3000
-			try {
-			Run, %A_MyDocuments%\CarOfferAHK.ahk, %A_MyDocuments%\%SCR_Folder_Name%.ahk /restart /f
-			} catch { 
-				Sleep, 6000
-				updateScript() 
-				ExitApp
-			}
-		} else {
-			Sleep, 5
-	}
-}
+    if !(A_ScriptDir = A_MyDocuments){
+        FileCopy, %A_ScriptDir%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
+        Sleep, 3000
+        try {
+        Run, %A_MyDocuments%\CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk /restart /f
+            } catch { 
+                Sleep, 6000
+		updateScript() 
+		ExitApp
+            }
+        } else {
+
+    }
+    }
 
 updateScript() {                     ;Create Directory Structure - Update script from Github
 
-		if !FileExist("%A_MyDocuments%\" . SCR_Folder_Name . "\"){
-			FileCreateDir, %A_MyDocuments%\%SCR_Folder_Name%\              ;Create Directory Structure 
-			FileCreateDir, %A_MyDocuments%\%SCR_Folder_Name%\resources\             ;Create Directory Structure
-		}
-		
-	UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/DealerCodes.ini, %A_MyDocuments%\%SCR_Folder_Name%\resources\DealerCodes.ini
-	UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/CarOfferAHK_Rounded.ico, %A_MyDocuments%\%SCR_Folder_Name%\resources\CarOfferAHK_Rounded.ico
-	UrlDownloadToFile, https://github.com/TyGreenyy/CarOfferAHK/raw/main/resources/imageres.dll, %A_MyDocuments%\%SCR_Folder_Name%\resources\imageres.dll
+  if !FileExist("%A_MyDocuments%\CarOfferAHK\")
+      FileCreateDir, %A_MyDocuments%\CarOfferAHK\              ;Create Directory Structure 
+      FileCreateDir, %A_MyDocuments%\CarOfferAHK\resources\             ;Create Directory Structure
 
-	whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")               ;Create HTTP request to check version
-	whr.Open("GET", "https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/version.md", true)
-	whr.Send()
-	; Using 'true' above and the call below allows the script to remain responsive.
-	whr.WaitForResponse()
-	global version := whr.ResponseText
+ UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/DealerCodes.ini, %A_MyDocuments%\CarOfferAHK\resources\DealerCodes.ini
+  UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/CarOfferAHK_Rounded.ico, %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
+  UrlDownloadToFile, https://github.com/TyGreenyy/CarOfferAHK/raw/main/resources/imageres.dll, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll
 
 
-		if (mastercomp = 0) {
-			RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
-			if (version = 348){                                             ;Downloads new .ahk if version does not match
-				} else {
-				 Sleep, 10
-				 ;~ UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
-			}
-		}
-	}
+  whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")               ;Create HTTP request to check version
+  whr.Open("GET", "https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/version.md", true)
+  whr.Send()
+  ; Using 'true' above and the call below allows the script to remain responsive.
+  whr.WaitForResponse()
+  global version := whr.ResponseText
+
+  RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
+  if (version = 348){                                             ;Downloads new .ahk if version does not match
+      } else {
+         UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
+        }
+}
 
 ;{ ============================== Copy From ===============================================
 ;} ====================================================================================
@@ -71,12 +60,12 @@ updateScript() {                     ;Create Directory Structure - Update script
 
 directoryMove()
 updateScript()
-
 caseMenu.__new()                ;creates the caseMenu
-			 
+trayMenu()                      ;creates th etraymenu
 
 #SingleInstance Force
 #include %A_ScriptDir%
+
 
 SetWorkingDir %A_ScriptDir%     ;Set script path as working directory.
 
