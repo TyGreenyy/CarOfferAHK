@@ -23,14 +23,15 @@
   This script disables the standard use of your CapsLock key. To Toggle CapsLock, press the CapsLock key while holding Right Shift. 
   
   Why are you using the CapsLock key anyways?
-  
--- 
+
 
 **Tests:**
 
 2021 Honda Accord Sedan Miles: 16,945
 
 1HGCV2F33MA007957
+  
+-- 
 
 ![image](https://user-images.githubusercontent.com/56348646/118030381-d5173b80-b32a-11eb-8ba9-2c830d1c628f.png)
 
