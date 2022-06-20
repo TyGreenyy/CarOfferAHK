@@ -47,7 +47,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   global version := whr.ResponseText
 
   RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
-  if (version = 348){                                             ;Downloads new .ahk if version does not match
+  if (version = 401){                                             ;Downloads new .ahk if version does not match
       } else {
          UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
         }
@@ -489,8 +489,8 @@ carfaxSearch(){
 
 mmrsearch(){
     searchTerm := Clip()
-    for index, count in StrSplit(searchTerm,  ["-"," "], ["-"," "]){
-       if (StrLen(trim(count)) = 17){
+    for index, count in StrSplit(searchTerm,  ["-"," ",A_Tab], ["-"," ",A_Tab]){
+        if (StrLen(trim(count)) = 17){
            vinIndex := index, VIN := count
         }
         if (RegexMatch(searchTerm, "20(\d{2,2})", yearv)){
@@ -498,6 +498,9 @@ mmrsearch(){
         }
         if (RegexMatch(searchTerm, "Miles(\:\s?)(\d{2,6})", miles)){
             milesIndex := index, miles := StrSplit(miles,"Miles:","Miles:")
+        }
+        if (RegexMatch(searchTerm, "(\t\d{2,6})", miles)) {
+            milesIndex := index, miles := StrSplit(miles,A_Tab,A_Tab)
         }
     }
     if (VIN && miles[2]){
@@ -508,7 +511,7 @@ mmrsearch(){
         toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
         return
     }
-    openLink := "https://mmr.manheim.com/?WT.svl=m_uni_hdr_sell&classic=false&country=US&mid=201800600170173&popup=true&source=man" . (VIN ? "&vin=" VIN : "") . (miles[2] ? "&miles=" miles[2] : "")
+    openLink := "https://mmr.manheim.com/?WT.svl=m_uni_hdr_sell&classic=false&country=US&mid=201800600170173&popup=true&source=man" . (VIN ? "&vin=" VIN : "") . (miles[2] ? "&mileage=" miles[2] : "")
     shellrun(openLink)
     Clipboard := VIN
     return
