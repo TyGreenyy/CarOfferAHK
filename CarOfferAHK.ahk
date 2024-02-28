@@ -1,6 +1,4 @@
 
-
-
 ; =====================================================================================
 ; AHK Version ...: AHK 1.1.32.00 (Unicode 64-bit) - December 22, 2020
 ; Platform ......: Windows 10
@@ -10,7 +8,6 @@
 
 reloadAsAdmin_Task()         ;Runs reloadAsAdmin task
 Suspend, On                     ;Suspend Script for Update
-
 
 directoryMove(){
     if !(A_ScriptDir = A_MyDocuments){
@@ -38,7 +35,6 @@ updateScript() {                     ;Create Directory Structure - Update script
   UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/resources/CarOfferAHK_Rounded.ico, %A_MyDocuments%\CarOfferAHK\resources\CarOfferAHK_Rounded.ico
   UrlDownloadToFile, https://github.com/TyGreenyy/CarOfferAHK/raw/main/resources/imageres.dll, %A_MyDocuments%\CarOfferAHK\resources\imageres.dll
 
-
   whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")               ;Create HTTP request to check version
   whr.Open("GET", "https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/version.md", true)
   whr.Send()
@@ -47,7 +43,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   global version := whr.ResponseText
 
   RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
-  if (version = 407){                                             ;Downloads new .ahk if version does not match
+  if (version = 501){                                         ;Downloads new .ahk if version does not match
       } else {
          UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
         }
@@ -149,7 +145,6 @@ if !(A_ScriptDir = A_MyDocuments){
 ;  return False
 ;}
 
-
 class caseMenu {
     __new(){
 
@@ -166,7 +161,7 @@ class caseMenu {
         ;Seperator One
         Menu, caseMenu, Add
 
-        for _, j in [["VINAnalysis","Search &VIN","2"],["VINAnalysisNEW","NEW Search &VIN","2"],["carfaxSearch","Search CarFax","26"],["mmrsearch","Get MMR","51"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["searchCompanyContacts","Search Dealer Contacts","5"],["getHubspotEngagement","Get Hubspot Activity URL","5"],["handsellCopy","Copy Multiple Handsell Units","16"],["vehicleinfopaste","Copy Multiple Units - Portal","17"],["yearmakemodelformat2","Copy Multiple Offers - Portal","17"]]
+        for _, j in [["VINAnalysis","Search &VIN","2"],["VINAnalysisNEW","NEW Search &VIN","2"],["ArbitrationsSearch","Arbit&rations","2"],["carfaxSearch","Search CarFax","26"],["mmrsearch","Get MMR","51"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["searchCompanyContacts","Search Dealer Contacts","5"],["getHubspotEngagement","Get Hubspot Activity URL","5"],["handsellCopy","Copy Multiple Handsell Units","16"],["vehicleinfopaste","Copy Multiple Units - Portal","17"],["yearmakemodelformat2","Copy Multiple Offers - Portal","17"]]
 
         {
             act:=ObjBindMethod(this,"textFormat",j[1])
@@ -191,7 +186,6 @@ class caseMenu {
 
         ;Seperator Two
         Menu, caseMenu, Add
-
 
         for _, j in [["DateAction","Paste Current Date"],["phoneFormat","###-###-####"],["phoneFormatPara","(###) ###-####"],["googlefileDownload","Google Drive DL Link"],["fileRename","File &Rename"],["cleanRename","Clean Rename"]]
 
@@ -464,6 +458,23 @@ VINAnalysisNEW(){
     return
 }
 
+ArbitrationsSearch(){
+    searchTerm := Trim(searchTermClean())
+    if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    if !(StrLen(searchTerm) = 17){
+        ; Check VIN
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    openLink := "https://opsweb.prod.pearlsolutions.com/#/issues?vin=" . searchTerm
+    toast("Searching Arbitrations", searchTerm, ,2000)
+    shellrun(openLink)
+    Clipboard := searchTerm
+    return
+}
 
  ;https://www.carfaxonline.com/vhrs/3N1CP5CU8KL559485
 
@@ -650,7 +661,6 @@ handsellCopy(){
             Clipboard := comblines
             return
     }
-
 
 vehicleinfopaste(){
     linestoParse := WinClip.gettext(Clip())
