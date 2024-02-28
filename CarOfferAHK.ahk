@@ -161,7 +161,7 @@ class caseMenu {
         ;Seperator One
         Menu, caseMenu, Add
 
-        for _, j in [["VINAnalysis","Search &VIN","2"],["VINAnalysisNEW","NEW Search &VIN","2"],["ArbitrationsSearch","Arbit&rations","2"],["carfaxSearch","Search CarFax","26"],["mmrsearch","Get MMR","51"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["searchCompanyContacts","Search Dealer Contacts","5"],["getHubspotEngagement","Get Hubspot Activity URL","5"],["handsellCopy","Copy Multiple Handsell Units","16"],["vehicleinfopaste","Copy Multiple Units - Portal","17"],["yearmakemodelformat2","Copy Multiple Offers - Portal","17"]]
+        for _, j in [["VINAnalysis","Search &VIN","2"],["VINAnalysisNEW","NEW Search &VIN","2"],["ArbitrationsSearch","Arbit&rations","2"],["InspectionsSearch","&Inspections","2"],["carfaxSearch","Search CarFax","26"],["mmrsearch","Get MMR","51"],["jiraFunc","Search &JIRA","6"],["carGurus","Search Car&Gurus","1"],["searchHubspot","Search &Hubspot","5"],["searchCompanyContacts","Search Dealer Contacts","5"],["getHubspotEngagement","Get Hubspot Activity URL","5"],["handsellCopy","Copy Multiple Handsell Units","16"],["vehicleinfopaste","Copy Multiple Units - Portal","17"],["yearmakemodelformat2","Copy Multiple Offers - Portal","17"]]
 
         {
             act:=ObjBindMethod(this,"textFormat",j[1])
@@ -470,6 +470,24 @@ ArbitrationsSearch(){
         return
     }
     openLink := "https://opsweb.prod.pearlsolutions.com/#/issues?vin=" . searchTerm
+    toast("Searching Arbitrations", searchTerm, ,2000)
+    shellrun(openLink)
+    Clipboard := searchTerm
+    return
+}
+
+InspectionsSearch(){
+    searchTerm := Trim(searchTermClean())
+    if !RegExMatch(searchTerm, "[A-Za-z0-9_]") {
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    if !(StrLen(searchTerm) = 17){
+        ; Check VIN
+        toast("No Match Found", "`nHighlight a Full Vin Number", ,5000)
+        return
+    }
+    openLink := "https://opsweb.prod.pearlsolutions.com/#/inspections?vin=" . searchTerm
     toast("Searching Arbitrations", searchTerm, ,2000)
     shellrun(openLink)
     Clipboard := searchTerm
