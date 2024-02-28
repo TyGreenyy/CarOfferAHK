@@ -43,7 +43,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   global version := whr.ResponseText
 
   RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
-  if (version = 502){                                         ;Downloads new .ahk if version does not match
+  if (version = 503){                                         ;Downloads new .ahk if version does not match
       } else {
          UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
         }
@@ -488,7 +488,7 @@ InspectionsSearch(){
         return
     }
     openLink := "https://opsweb.prod.pearlsolutions.com/#/inspections?vin=" . searchTerm
-    toast("Searching Arbitrations", searchTerm, ,2000)
+    toast("Searching Inspections", searchTerm, ,2000)
     shellrun(openLink)
     Clipboard := searchTerm
     return
