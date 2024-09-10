@@ -43,7 +43,7 @@ updateScript() {                     ;Create Directory Structure - Update script
   global version := whr.ResponseText
 
   RegExMatch(trim(version), "\d+" , version)                  ;Checks version against Github version
-  if (version = 503){                                         ;Downloads new .ahk if version does not match
+  if (version = 513){                                         ;Downloads new .ahk if version does not match
       } else {
          UrlDownloadToFile, https://raw.githubusercontent.com/TyGreenyy/CarOfferAHK/main/CarOfferAHK.ahk, %A_MyDocuments%\CarOfferAHK.ahk
         }
@@ -548,8 +548,8 @@ mmrsearch(){
 
 jiraFunc(){
     searchTerm := searchTermClean()
-    if (RegExMatch(searchTerm, "O)COPS(\s|\-)?(\d+)", SubPat)){
-        searchTerm := SubPat.Value(2)
+    if (RegExMatch(searchTerm, "O)(COPS|MI|INT|APE|CSD|INFRA|DEVOPS)(\s|\-)?(\d+)", SubPat)){
+        searchTerm := SubPat.Value(1) "-" SubPat.Value(3)
     }
     openLink := "https://caroffer.atlassian.net/secure/QuickSearch.jspa?searchString=" . searchTerm
     shellrun(openLink)
